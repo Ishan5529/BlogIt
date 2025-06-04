@@ -201,6 +201,9 @@ GEM
       psych (>= 4.0.0)
     reline (0.6.1)
       io-console (~> 0.5)
+    responders (3.1.1)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
     securerandom (0.4.1)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
@@ -251,6 +254,7 @@ DEPENDENCIES
   jsbundling-rails
   puma (>= 5.0)
   rails (~> 7.1.3, >= 7.1.3.4)
+  responders
   sprockets-rails
   sqlite3 (~> 1.4)
   tzinfo-data
