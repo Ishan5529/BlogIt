@@ -2,7 +2,7 @@ import { routes } from "constants/routes";
 
 import React from "react";
 
-import { Book, List } from "@bigbinary/neeto-icons";
+import { Book, List, Edit } from "@bigbinary/neeto-icons";
 import classNames from "classnames";
 import { Profile } from "components/commons";
 import {
@@ -22,14 +22,22 @@ const SideBar = () => {
           <Book />
         </div>
         <NavLink
-          // to={routes.blogs}
-          to="/blogs"
+          to={routes.blogs.index}
           className={classNames({
-            "text-blue-400": pathname === routes.blogs,
-            "text-gray-400": pathname !== routes.blogs,
+            "text-blue-400": pathname === routes.blogs.index,
+            "text-gray-400": pathname !== routes.blogs.index,
           })}
         >
           <List />
+        </NavLink>
+        <NavLink
+          to={routes.blogs.create_blog}
+          className={classNames({
+            "text-blue-400": pathname === routes.blogs.create_blog,
+            "text-gray-400": pathname !== routes.blogs.create_blog,
+          })}
+        >
+          <Edit />
         </NavLink>
       </div>
       <Profile profile_img_url={profile_img_url} />

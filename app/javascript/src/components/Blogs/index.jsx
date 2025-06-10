@@ -1,3 +1,5 @@
+import { routes } from "constants/routes";
+
 import React, { useState, useEffect } from "react";
 
 import postsApi from "apis/posts";
@@ -6,7 +8,7 @@ import { PageLoader, PageTitle } from "components/commons";
 import { isNil, isEmpty, either } from "ramda";
 import { formatDate } from "utils/formatDate";
 
-const Blogs = () => {
+const Blogs = ({ history }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +37,10 @@ const Blogs = () => {
     );
   }
 
+  const showPost = slug => {
+    history.push(`/blogs/${slug}/show`);
+  };
+
   if (either(isNil, isEmpty)(posts)) {
     return (
       <div className="flex h-5/6 items-center justify-center">
@@ -45,15 +51,21 @@ const Blogs = () => {
 
   return (
     <div className="space-y-12 pl-10">
-      <PageTitle title="Blog posts" />
+      <PageTitle
+        enable_button
+        button_text="Add new blog post"
+        handleClick={() => (window.location.href = routes.blogs.create_blog)}
+        title="Blog posts"
+      />
       <div className="h-full space-y-4 overflow-y-auto">
-        {posts.map(({ id, title, description, updated_at }) => (
+        {posts.map(({ id, title, description, updated_at, slug }) => (
           <Blog
             blog_content={description}
             blog_date={formatDate(updated_at)}
             blog_title={title}
-            className="shadow-sm"
             key={id}
+            showPost={showPost}
+            slug={slug}
           />
         ))}
       </div>

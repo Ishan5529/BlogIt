@@ -3,6 +3,8 @@ import { routes } from "constants/routes";
 import React from "react";
 
 import Blogs from "components/Blogs";
+import CreatePost from "components/Blogs/Create";
+import ShowPost from "components/Blogs/Show";
 // import { SideBar, PageNotFound } from "components/commons";
 import { SideBar } from "components/commons";
 import {
@@ -20,8 +22,10 @@ const App = () => (
       <SideBar />
       <div className="flex-1 overflow-hidden p-4">
         <Switch>
-          <Route exact component={Blogs} path={routes.blogs} />
-          <Redirect exact from={routes.root} to={routes.blogs} />
+          <Route exact component={Blogs} path={routes.blogs.index} />
+          <Route exact component={ShowPost} path={routes.blogs.show_blog} />
+          <Route exact component={CreatePost} path={routes.blogs.create_blog} />
+          <Redirect exact from={routes.root} to={routes.blogs.index} />
           {/* <Route exact component={PageNotFound} path={routes.pageNotFound} /> */}
         </Switch>
       </div>
