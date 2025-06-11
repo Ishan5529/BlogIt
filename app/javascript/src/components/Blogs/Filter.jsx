@@ -1,14 +1,122 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
+import { Search, Plus } from "@bigbinary/neeto-icons";
+import categoriesApi from "apis/categories";
+import classNames from "classnames";
 import Blogs from "components/Blogs";
+import { PageLoader } from "components/commons";
+import { useHistory } from "react-router-dom";
 
-const FilteredBlogs = () => (
-  <div className="flex h-full flex-col space-y-12 pl-10">
-    <Blogs
-      fetchFiltered
-      history={{ push: path => (window.location.href = path) }}
-    />
-  </div>
-);
+const FilteredBlogs = () => {
+  const [allCategories, setAllCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const history = useHistory();
+
+  useEffect(() => {
+    const fetchAllCategories = async () => {
+      try {
+        const {
+          data: { categories },
+        } = await categoriesApi.fetch();
+
+        setAllCategories(
+          categories.map(category => ({
+            value: category.id,
+            label: category.name,
+          }))
+        );
+        setLoading(false);
+      } catch (error) {
+        logger.error(error);
+        setAllCategories([]);
+        setLoading(false);
+      }
+    };
+    fetchAllCategories();
+  }, []);
+
+  useEffect(() => {
+    const sortedSelected = [...selectedCategories].sort((a, b) => {
+      const catA = allCategories.find(c => c.label === a);
+      const catB = allCategories.find(c => c.label === b);
+
+      return (catA?.value || 0) - (catB?.value || 0);
+    });
+
+    const params = sortedSelected
+      .map(categoryLabel => {
+        const cat = allCategories.find(c => c.label === categoryLabel);
+
+        return cat ? `category_ids[]=${encodeURIComponent(cat.value)}` : null;
+      })
+      .filter(Boolean)
+      .join("&");
+
+    history.replace({
+      pathname: "/blogs/filter",
+      search: params ? `?${params}` : "",
+    });
+  }, [selectedCategories, allCategories, history]);
+
+  const toggleCategoryFilter = event => {
+    const category = event.target.innerText;
+    setSelectedCategories(prevSelected => {
+      if (prevSelected.includes(category)) {
+        return prevSelected.filter(item => item !== category);
+      }
+
+      return [...prevSelected, category];
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="h-screen w-screen">
+        <PageLoader />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-full w-full flex-row">
+      <div className="w-[500px] space-y-12 bg-gray-100 p-10">
+        <div className="flex flex-row items-center justify-between">
+          <h3>CATEGORIES</h3>
+          <div className="flex flex-row items-center">
+            <Search className="text-gray-500" />
+            <Plus className="ml-2 text-gray-500" />
+          </div>
+        </div>
+        <div>
+          <ul className="mt-4 space-y-4">
+            {allCategories.map(category => (
+              <li
+                key={category.value}
+                className={classNames(
+                  "cursor-pointer rounded-lg px-4 py-2 text-lg",
+                  {
+                    "bg-white hover:bg-gray-50": selectedCategories.includes(
+                      category.label
+                    ),
+                    "bg-gray-200 hover:bg-gray-300":
+                      !selectedCategories.includes(category.label),
+                  }
+                )}
+                onClick={toggleCategoryFilter}
+              >
+                {category.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <Blogs
+        fetchFiltered
+        history={{ push: path => (window.location.href = path) }}
+      />
+    </div>
+  );
+};
 
 export default FilteredBlogs;

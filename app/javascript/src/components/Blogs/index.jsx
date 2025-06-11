@@ -15,7 +15,14 @@ const Blogs = ({ history, fetchFiltered = false }) => {
 
   const { search } = useLocation();
   const params = new URLSearchParams(search);
-  const filterParams = Object.fromEntries(params.entries());
+  const filterParams = {};
+  for (const [key, value] of params.entries()) {
+    if (filterParams[key]) {
+      filterParams[key] = [].concat(filterParams[key], value);
+    } else {
+      filterParams[key] = value;
+    }
+  }
 
   const fetchPosts = async () => {
     try {
@@ -66,14 +73,22 @@ const Blogs = ({ history, fetchFiltered = false }) => {
 
   if (either(isNil, isEmpty)(posts)) {
     return (
-      <div className="flex h-5/6 items-center justify-center">
-        <h1 className="my-5 text-center text-xl leading-5">No posts yet.</h1>
+      <div className="flex h-full w-full flex-col space-y-12 pb-4 pl-14 pr-10 pt-4">
+        <PageTitle
+          enable_button
+          button_text="Add new blog post"
+          handleClick={() => (window.location.href = routes.blogs.create_blog)}
+          title="Blog posts"
+        />
+        <div className="flex h-5/6 items-center justify-center">
+          <h1 className="my-5 text-center text-xl leading-5">No posts.</h1>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-full flex-col space-y-12 pl-10">
+    <div className="flex h-full w-full flex-col space-y-12 pb-4 pl-14 pr-10 pt-4">
       <PageTitle
         enable_button
         button_text="Add new blog post"

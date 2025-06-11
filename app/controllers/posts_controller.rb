@@ -21,10 +21,13 @@ class PostsController < ApplicationController
 
     def filtered_posts
       if params[:category_ids].present?
-        post_ids = Post.joins(:categories)
+        categories_post_join = Post.joins(:categories)
+        filtered_posts = categories_post_join
           .where(categories: { id: params[:category_ids] })
+          .group("posts.id")
+          .having("COUNT(DISTINCT categories.id) = ?", params[:category_ids].size)
           .distinct
-          .pluck(:id)
+        post_ids = filtered_posts.pluck(:id)
         Post.includes(:categories, user: :organization)
           .where(id: post_ids)
       else

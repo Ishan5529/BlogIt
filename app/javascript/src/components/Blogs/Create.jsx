@@ -54,7 +54,7 @@ const Create = ({ history }) => {
   };
 
   return (
-    <div className="space-y-12 pl-10">
+    <div className="space-y-12 py-4 pl-14">
       <PageTitle title="Add new blog" />
       <Form
         allCategories={allCategories}
