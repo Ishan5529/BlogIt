@@ -10,10 +10,10 @@ import {
   useLocation,
 } from "react-router-dom/cjs/react-router-dom.min";
 
+import { PROFILE_IMAGE_URL } from "../../constants";
+
 const SideBar = () => {
   const { pathname } = useLocation();
-  const profile_img_url =
-    "https://cdn.prod.website-files.com/62d84e447b4f9e7263d31e94/6399a4d27711a5ad2c9bf5cd_ben-sweet-2LowviVHZ-E-unsplash-1.jpeg";
 
   return (
     <div className="flex w-20 flex-col items-center justify-between space-y-6 border-2 py-6 text-white shadow-sm">
@@ -40,7 +40,7 @@ const SideBar = () => {
           <Edit />
         </NavLink>
       </div>
-      <Profile profile_img_url={profile_img_url} />
+      <Profile profile_img_url={PROFILE_IMAGE_URL} />
     </div>
   );
 };

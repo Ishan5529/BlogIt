@@ -50,24 +50,27 @@ const Blogs = ({ history }) => {
   }
 
   return (
-    <div className="space-y-12 pl-10">
+    <div className="flex h-full flex-col space-y-12 pl-10">
       <PageTitle
         enable_button
         button_text="Add new blog post"
         handleClick={() => (window.location.href = routes.blogs.create_blog)}
         title="Blog posts"
       />
-      <div className="h-full space-y-4 overflow-y-auto">
-        {posts.map(({ id, title, description, updated_at, slug }) => (
-          <Blog
-            blog_content={description}
-            blog_date={formatDate(updated_at)}
-            blog_title={title}
-            key={id}
-            showPost={showPost}
-            slug={slug}
-          />
-        ))}
+      <div className="h-full flex-1 space-y-4 overflow-y-auto">
+        {posts.map(
+          ({ id, title, updated_at, slug, categories, user: { name } }) => (
+            <Blog
+              categories={categories.map(category => category.name)}
+              date={formatDate(updated_at)}
+              key={id}
+              name={name}
+              showPost={showPost}
+              slug={slug}
+              title={title}
+            />
+          )
+        )}
       </div>
     </div>
   );

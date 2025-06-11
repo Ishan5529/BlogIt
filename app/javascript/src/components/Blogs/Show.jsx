@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 
 import postsApi from "apis/posts";
 import BlogContent from "components/Blogs/BlogContent";
-import { PageLoader, PageTitle } from "components/commons";
+import { PageLoader, PageTitle, Profile } from "components/commons";
 import { useHistory, useParams } from "react-router-dom";
+import { formatDate } from "utils/formatDate";
+
+import { PROFILE_IMAGE_URL } from "../../constants";
 
 const Show = () => {
   const [post, setPost] = useState({});
@@ -33,10 +36,22 @@ const Show = () => {
   }
 
   return (
-    <div className="space-y-12 pl-10">
-      <PageTitle title={post.title} />
+    <div className="mt-8 flex h-full flex-col space-y-8 overflow-y-auto pb-20 pl-10 pr-40">
       <div className="space-y-2">
-        <BlogContent blog_content={post.description} />
+        <BlogContent
+          categories={post.categories.map(category => category.name)}
+        />
+        <PageTitle title={post.title} />
+      </div>
+      <div className="flex flex-row space-x-6">
+        <Profile profile_img_url={PROFILE_IMAGE_URL} />
+        <div className="flex flex-col space-y-1">
+          <p className="text-gray-600">{post.user.name}</p>
+          <p className="text-gray-600">{formatDate(post.updated_at)}</p>
+        </div>
+      </div>
+      <div className="pr-32">
+        <p className="text-gray-700">{post.description}</p>
       </div>
     </div>
   );
