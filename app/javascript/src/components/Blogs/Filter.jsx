@@ -11,6 +11,8 @@ const FilteredBlogs = () => {
   const [allCategories, setAllCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const history = useHistory();
 
   useEffect(() => {
@@ -70,6 +72,12 @@ const FilteredBlogs = () => {
     });
   };
 
+  const filteredCategories = searchTerm
+    ? allCategories.filter(cat =>
+        cat.label.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : allCategories;
+
   if (loading) {
     return (
       <div className="h-screen w-screen">
@@ -80,17 +88,43 @@ const FilteredBlogs = () => {
 
   return (
     <div className="flex h-full w-full flex-row">
-      <div className="w-[500px] space-y-12 bg-gray-100 p-10">
+      <div className="w-[550px] space-y-12 bg-gray-100 p-10">
         <div className="flex flex-row items-center justify-between">
           <h3>CATEGORIES</h3>
           <div className="flex flex-row items-center">
-            <Search className="text-gray-500" />
-            <Plus className="ml-2 text-gray-500" />
+            {showSearch || searchTerm ? (
+              <input
+                autoFocus
+                className="ml-2 rounded border px-2 text-sm"
+                placeholder="Search category"
+                type="text"
+                value={searchTerm}
+                onBlur={e => {
+                  if (!e.target.value) setShowSearch(false);
+                }}
+                onChange={e => {
+                  setSearchTerm(e.target.value);
+                  if (!showSearch) setShowSearch(true);
+                }}
+                onKeyDown={e => {
+                  if (e.key === "Escape") {
+                    setSearchTerm("");
+                    setShowSearch(false);
+                  }
+                }}
+              />
+            ) : (
+              <Search
+                className="cursor-pointer text-gray-500"
+                onClick={() => setShowSearch(true)}
+              />
+            )}
+            <Plus className="ml-2 text-gray-500" size={24} />
           </div>
         </div>
         <div>
           <ul className="mt-4 space-y-4">
-            {allCategories.map(category => (
+            {filteredCategories.map(category => (
               <li
                 key={category.value}
                 className={classNames(
