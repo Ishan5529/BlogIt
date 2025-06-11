@@ -6,11 +6,16 @@ import postsApi from "apis/posts";
 import Blog from "components/Blogs/Blog";
 import { PageLoader, PageTitle } from "components/commons";
 import { isNil, isEmpty, either } from "ramda";
+import { useLocation } from "react-router-dom";
 import { formatDate } from "utils/formatDate";
 
-const Blogs = ({ history }) => {
+const Blogs = ({ history, fetchFiltered = false }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const filterParams = Object.fromEntries(params.entries());
 
   const fetchPosts = async () => {
     try {
@@ -25,9 +30,27 @@ const Blogs = ({ history }) => {
     }
   };
 
+  const fetchFilteredPosts = async () => {
+    try {
+      const {
+        data: { posts },
+      } = await postsApi.fetch(filterParams);
+      setPosts(posts);
+      setLoading(false);
+    } catch (error) {
+      logger.error(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    setLoading(true);
+    if (fetchFiltered) {
+      fetchFilteredPosts();
+    } else {
+      fetchPosts();
+    }
+  }, [fetchFiltered, search]);
 
   if (loading) {
     return (

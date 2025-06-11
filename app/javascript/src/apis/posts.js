@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const fetch = () => axios.get("/posts");
+const fetch = params => axios.get("/posts", { params });
 
 const show = slug => axios.get(`/posts/${slug}`);
 

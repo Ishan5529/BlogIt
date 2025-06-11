@@ -4,6 +4,7 @@ import React from "react";
 
 import Blogs from "components/Blogs";
 import CreatePost from "components/Blogs/Create";
+import FilterPost from "components/Blogs/Filter";
 import ShowPost from "components/Blogs/Show";
 // import { SideBar, PageNotFound } from "components/commons";
 import { SideBar } from "components/commons";
@@ -25,6 +26,11 @@ const App = () => (
           <Route exact component={Blogs} path={routes.blogs.index} />
           <Route exact component={ShowPost} path={routes.blogs.show_blog} />
           <Route exact component={CreatePost} path={routes.blogs.create_blog} />
+          <Route
+            exact
+            component={FilterPost}
+            path={routes.blogs.filter_blogs}
+          />
           <Redirect exact from={routes.root} to={routes.blogs.index} />
           {/* <Route exact component={PageNotFound} path={routes.pageNotFound} /> */}
         </Switch>

@@ -2,7 +2,7 @@
 
 class PostsController < ApplicationController
   def index
-    @posts = Post.includes(:categories, user: :organization).all
+    @posts = filtered_posts
     render
   end
 
@@ -18,6 +18,19 @@ class PostsController < ApplicationController
   end
 
   private
+
+    def filtered_posts
+      if params[:category_ids].present?
+        post_ids = Post.joins(:categories)
+          .where(categories: { id: params[:category_ids] })
+          .distinct
+          .pluck(:id)
+        Post.includes(:categories, user: :organization)
+          .where(id: post_ids)
+      else
+        Post.includes(:categories, user: :organization).all
+      end
+    end
 
     def post_params
       params.require(:post).permit(:title, :description, :user_id, category_ids: [])
