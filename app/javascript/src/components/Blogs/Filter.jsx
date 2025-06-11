@@ -4,8 +4,10 @@ import { Search, Plus } from "@bigbinary/neeto-icons";
 import categoriesApi from "apis/categories";
 import classNames from "classnames";
 import Blogs from "components/Blogs";
-import { PageLoader } from "components/commons";
+import { PageLoader, Modal } from "components/commons";
 import { useHistory } from "react-router-dom";
+
+// Simple modal component
 
 const FilteredBlogs = () => {
   const [allCategories, setAllCategories] = useState([]);
@@ -13,6 +15,7 @@ const FilteredBlogs = () => {
   const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -61,6 +64,29 @@ const FilteredBlogs = () => {
     });
   }, [selectedCategories, allCategories, history]);
 
+  const handleCreateCategory = async name => {
+    try {
+      await categoriesApi.create({ name });
+      setShowModal(false);
+      setLoading(true);
+      const {
+        data: { categories },
+      } = await categoriesApi.fetch();
+
+      setAllCategories(
+        categories.map(category => ({
+          value: category.id,
+          label: category.name,
+        }))
+      );
+      setLoading(false);
+    } catch (error) {
+      logger.error(error);
+      setShowModal(false);
+      setLoading(false);
+    }
+  };
+
   const toggleCategoryFilter = event => {
     const category = event.target.innerText;
     setSelectedCategories(prevSelected => {
@@ -88,6 +114,14 @@ const FilteredBlogs = () => {
 
   return (
     <div className="flex h-full w-full flex-row">
+      <Modal
+        input_label="Category title"
+        input_placeholder="Enter category name"
+        isOpen={showModal}
+        title="New category"
+        onClose={() => setShowModal(false)}
+        onSubmit={handleCreateCategory}
+      />
       <div className="w-[550px] space-y-12 bg-gray-100 p-10">
         <div className="flex flex-row items-center justify-between">
           <h3>CATEGORIES</h3>
@@ -119,7 +153,12 @@ const FilteredBlogs = () => {
                 onClick={() => setShowSearch(true)}
               />
             )}
-            <Plus className="ml-2 text-gray-500" size={24} />
+            <Plus
+              className="ml-2 text-gray-500"
+              size={24}
+              style={{ cursor: "pointer" }}
+              onClick={() => setShowModal(true)}
+            />
           </div>
         </div>
         <div>

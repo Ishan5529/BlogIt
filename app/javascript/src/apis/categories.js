@@ -6,7 +6,7 @@ const show = name => axios.get(`/categories/${name}`);
 
 const create = payload =>
   axios.post("/categories/", {
-    post: payload,
+    category: payload,
   });
 
 const categoriesApi = { fetch, show, create };

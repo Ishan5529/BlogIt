@@ -14,7 +14,7 @@ const Form = ({
   loading,
   handleSubmit,
 }) => (
-  <div className="mr-10 h-full rounded-2xl border border-gray-300 py-16 pl-16 pr-28 shadow-md">
+  <div className="mr-32 h-full rounded-2xl border border-gray-300 py-16 pl-16 pr-28 shadow-md">
     <form
       className="flex h-full w-full flex-col space-y-48"
       onSubmit={handleSubmit}

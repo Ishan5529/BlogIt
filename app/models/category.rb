@@ -2,7 +2,7 @@
 
 class Category < ApplicationRecord
   has_and_belongs_to_many :posts
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: { case_sensitive: false }
   after_destroy :destroy_orphan_posts
   before_destroy :store_post_ids
 
