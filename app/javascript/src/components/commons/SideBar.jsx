@@ -10,7 +10,7 @@ import {
   useLocation,
 } from "react-router-dom/cjs/react-router-dom.min";
 
-import { PROFILE_IMAGE_URL } from "../../constants";
+import { PROFILE_IMAGE_URL } from "../../constants/user_details";
 
 const SideBar = () => {
   const { pathname } = useLocation();

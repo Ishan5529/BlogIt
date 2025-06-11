@@ -6,7 +6,7 @@ import { PageLoader, PageTitle, Profile } from "components/commons";
 import { useHistory, useParams } from "react-router-dom";
 import { formatDate } from "utils/formatDate";
 
-import { PROFILE_IMAGE_URL } from "../../constants";
+import { PROFILE_IMAGE_URL } from "../../constants/user_details";
 
 const Show = () => {
   const [post, setPost] = useState({});

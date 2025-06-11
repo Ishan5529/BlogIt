@@ -1,10 +1,14 @@
 import React from "react";
 
 import { Button, Input } from "components/commons";
+import Select from "react-select";
 
 const Form = ({
   title,
   setTitle,
+  categories,
+  setCategories,
+  allCategories = [],
   content,
   setContent,
   loading,
@@ -12,7 +16,7 @@ const Form = ({
 }) => (
   <div className="mr-10 h-full rounded-2xl border border-gray-300 py-16 pl-16 pr-28 shadow-md">
     <form
-      className="flex h-full w-full flex-col space-y-64"
+      className="flex h-full w-full flex-col space-y-48"
       onSubmit={handleSubmit}
     >
       <div className="flex h-full w-full flex-col space-y-8">
@@ -22,6 +26,20 @@ const Form = ({
           value={title}
           onChange={e => setTitle(e.target.value.slice(0, 125))}
         />
+        <div>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Categories*
+          </label>
+          <Select
+            isMulti
+            className="basic-multi-select"
+            classNamePrefix="select"
+            options={allCategories}
+            placeholder="Select categories..."
+            value={categories}
+            onChange={selected => setCategories(selected)}
+          />
+        </div>
         <Input
           className="h-40 text-left align-top"
           label="Description*"
