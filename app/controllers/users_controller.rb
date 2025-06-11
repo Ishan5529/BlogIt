@@ -2,15 +2,7 @@
 
 class UsersController < ApplicationController
   def index
-    users = User.all.as_json(include: { organization: { only: %i[name id] } })
-    # users = User.all
-    render status: :ok, json: { users: }
-    # render_json({ users: })
+    @users = User.includes(:organization).all
+    render
   end
-  # def index
-  #   users = User.select(:id, :name, :email, :organization_id)
-  #     .includes(:organization)
-  #     .as_json(include: { organization: { only: %i[id name] } })
-  #   render status: :ok, json: { users: users }
-  # end
 end

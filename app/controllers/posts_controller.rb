@@ -2,13 +2,13 @@
 
 class PostsController < ApplicationController
   def index
-    posts = Post.all
-    render status: :ok, json: { posts: }
+    @posts = Post.includes(:categories, user: :organization).all
+    render
   end
 
   def show
-    post = Post.find_by!(slug: params[:slug])
-    render_json({ post: })
+    @post = Post.find_by!(slug: params[:slug])
+    render
   end
 
   def create
@@ -20,6 +20,6 @@ class PostsController < ApplicationController
   private
 
     def post_params
-      params.require(:post).permit(:title, :description)
+      params.require(:post).permit(:title, :description, :user_id, category_ids: [])
     end
 end

@@ -2,8 +2,7 @@
 
 class OrganizationsController < ApplicationController
   def index
-    organizations = Organization.select(:id, :name)
-    render status: :ok, json: { organizations: }
-    # render_json({ users: })
+    @organizations = Organization.all
+    render
   end
 end

@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_11_050831) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_11_061842) do
+  create_table "categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories_posts", id: false, force: :cascade do |t|
+    t.integer "post_id", null: false
+    t.integer "category_id", null: false
+    t.index ["category_id"], name: "index_categories_posts_on_category_id"
+    t.index ["post_id", "category_id"], name: "index_categories_posts_on_post_id_and_category_id", unique: true
+    t.index ["post_id"], name: "index_categories_posts_on_post_id"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -26,6 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_11_050831) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug", null: false
+    t.integer "user_id"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
   end
 
@@ -39,5 +54,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_11_050831) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "categories_posts", "categories"
+  add_foreign_key "categories_posts", "posts"
+  add_foreign_key "posts", "users", on_delete: :cascade
   add_foreign_key "users", "organizations"
 end
