@@ -42,27 +42,18 @@ const FilteredBlogs = () => {
   }, []);
 
   useEffect(() => {
-    const sortedSelected = [...selectedCategories].sort((a, b) => {
-      const catA = allCategories.find(c => c.label === a);
-      const catB = allCategories.find(c => c.label === b);
-
-      return (catA?.value || 0) - (catB?.value || 0);
-    });
-
+    const sortedSelected = [...selectedCategories].sort();
     const params = sortedSelected
-      .map(categoryLabel => {
-        const cat = allCategories.find(c => c.label === categoryLabel);
-
-        return cat ? `category_ids[]=${encodeURIComponent(cat.value)}` : null;
-      })
-      .filter(Boolean)
+      .map(
+        categoryLabel => `category_names[]=${encodeURIComponent(categoryLabel)}`
+      )
       .join("&");
 
     history.replace({
       pathname: "/blogs/filter",
       search: params ? `?${params}` : "",
     });
-  }, [selectedCategories, allCategories, history]);
+  }, [selectedCategories, history]);
 
   const handleCreateCategory = async name => {
     try {
