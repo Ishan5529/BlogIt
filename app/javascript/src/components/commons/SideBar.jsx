@@ -2,17 +2,11 @@ import { routes } from "constants/routes";
 
 import React, { useState, useEffect, useRef } from "react";
 
-import {
-  Book,
-  List,
-  Edit,
-  ListDetails,
-  LeftArrow,
-} from "@bigbinary/neeto-icons";
 import authApi from "apis/auth";
 import { resetAuthTokens } from "apis/axios";
 import classNames from "classnames";
 import { Profile } from "components/commons";
+import { Book, List, Edit, ListDetails, LeftArrow } from "neetoicons";
 import {
   NavLink,
   useLocation,

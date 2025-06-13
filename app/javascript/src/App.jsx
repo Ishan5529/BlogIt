@@ -29,7 +29,6 @@ const App = () => {
         <SideBar />
         <div className="flex-1 overflow-hidden">
           <Switch>
-            {/* <Route exact component={Blogs} path={routes.blogs.index} /> */}
             <Route exact component={ShowPost} path={routes.blogs.show_blog} />
             <Route
               exact

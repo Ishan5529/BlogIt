@@ -6,6 +6,10 @@ import { absolutePath } from "./constants.js";
 const require = createRequire(import.meta.url);
 
 const alias = {
+  "@bigbinary/neetoui/dist": path.resolve(
+    __dirname,
+    "../../node_modules/@bigbinary/neetoui/dist/index.css"
+  ),
   images: path.resolve(process.cwd(), "app/assets/images"),
   crypto: require.resolve("crypto-browserify"),
   path: require.resolve("path-browserify"),
@@ -17,6 +21,8 @@ const alias = {
   constants: absolutePath("src/constants"),
   utils: absolutePath("src/utils"),
   assets: absolutePath("../assets"),
+  neetoui: "@bigbinary/neetoui",
+  neetoicons: "@bigbinary/neeto-icons",
 };
 
 export { alias };
