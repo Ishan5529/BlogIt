@@ -16,7 +16,7 @@ json.posts @posts do |post|
   end
 
   json.user do
-    json.extract! post.user, :id, :name, :email
+    json.extract! post.user, :id, :name, :email, :organization_id
   end
 
   json.organization do

@@ -1,30 +1,31 @@
 # frozen_string_literal: true
 
 class PostsController < ApplicationController
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
   def index
-    @posts = filtered_posts
+    @posts = policy_scope(Post)
+    @posts = filter_posts_by_category_name_or_category_id(@posts)
     render
   end
 
   def show
     @post = Post.find_by!(slug: params[:slug])
+    authorize @post
     render
   end
 
   def create
     post = Post.new(post_params)
+    authorize post
     post.save!
     render_notice(t("successfully_created", entity: "Post"))
   end
 
   private
 
-    def filtered_posts
-      org_id = current_user.organization_id
-
-      base_scope = Post.includes(:categories, user: :organization)
-        .where(users: { organization_id: org_id })
-        .references(:users)
+    def filter_posts_by_category_name_or_category_id(base_scope)
+      base_scope = base_scope.includes(user: :organization)
 
       if params[:category_names].present?
         names = params[:category_names]

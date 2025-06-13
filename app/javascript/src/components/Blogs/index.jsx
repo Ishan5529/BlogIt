@@ -51,7 +51,7 @@ const Blogs = ({ history, fetchFiltered = false }) => {
   };
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     if (fetchFiltered) {
       fetchFilteredPosts();
     } else {

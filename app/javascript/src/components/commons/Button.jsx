@@ -32,7 +32,7 @@ const Button = ({
           "px-2 py-1": size === "small",
           "bg-black text-white hover:bg-gray-800":
             !loading && style === "primary",
-          "bg-white text-gray-800 hover:bg-gray-100":
+          "bg-white text-gray-800 hover:bg-gray-50":
             !loading && style === "secondary",
           "bg-gray-300 text-gray-800": loading,
           "cursor-wait": loading,

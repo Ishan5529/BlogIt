@@ -51,13 +51,15 @@ const Form = ({
         />
       </div>
       <div className="mt-24 flex w-full items-center justify-end space-x-4">
-        <Button
-          buttonText="Cancel"
-          className="w-32"
-          loading={loading}
-          style="secondary"
-          onClick={() => (window.location.href = "/blogs")}
-        />
+        <div className="rounded-md border border-black">
+          <Button
+            buttonText="Cancel"
+            className="w-32"
+            loading={loading}
+            style="secondary"
+            onClick={() => (window.location.href = "/")}
+          />
+        </div>
         <Button
           buttonText="Submit"
           className="w-32"

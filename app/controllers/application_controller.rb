@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include Pundit::Authorization
   protect_from_forgery
 
   rescue_from StandardError, with: :handle_api_exception
@@ -63,7 +64,13 @@ class ApplicationController < ActionController::Base
     render status:, json:
   end
 
+  rescue_from Pundit::NotAuthorizedError, with: :handle_authorization_error
+
   private
+
+    def handle_authorization_error
+      render_error(t("authorization.denied"), :forbidden)
+    end
 
     def authenticate_user_using_x_auth_token
       user_email = request.headers["X-Auth-Email"].presence
