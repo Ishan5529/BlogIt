@@ -32,8 +32,8 @@ const Blogs = ({ history, fetchFiltered = false }) => {
       setPosts(posts);
       setLoading(false);
     } catch (error) {
-      logger.error(error);
       setLoading(false);
+      logger.error(error);
     }
   };
 
@@ -45,8 +45,8 @@ const Blogs = ({ history, fetchFiltered = false }) => {
       setPosts(posts);
       setLoading(false);
     } catch (error) {
-      logger.error(error);
       setLoading(false);
+      logger.error(error);
     }
   };
 

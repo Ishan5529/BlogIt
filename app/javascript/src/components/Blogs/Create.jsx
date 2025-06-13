@@ -48,8 +48,8 @@ const Create = ({ history }) => {
       setLoading(false);
       history.push("/blogs");
     } catch (error) {
-      logger.error(error);
       setLoading(false);
+      logger.error(error);
     }
   };
 

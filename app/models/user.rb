@@ -16,6 +16,7 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true, if: :password_required?
 
   has_secure_password
+  has_secure_token :authentication_token
 
   private
 

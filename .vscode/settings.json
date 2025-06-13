@@ -9,4 +9,5 @@
   "files.trimFinalNewlines": true,
   "editor.formatOnSave": true,
   "yaml.format.enable": true,
+  "compile-hero.disable-compile-files-on-did-save-code": false,
 }

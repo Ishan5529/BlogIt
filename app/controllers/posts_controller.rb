@@ -14,35 +14,39 @@ class PostsController < ApplicationController
   def create
     post = Post.new(post_params)
     post.save!
-    render_notice("Post created successfully")
+    render_notice(t("successfully_created", entity: "Post"))
   end
 
   private
 
     def filtered_posts
+      org_id = current_user.organization_id
+
+      base_scope = Post.includes(:categories, user: :organization)
+        .where(users: { organization_id: org_id })
+        .references(:users)
+
       if params[:category_names].present?
         names = params[:category_names]
-        categories_post_join = Post.joins(:categories)
+        categories_post_join = base_scope.joins(:categories)
         filtered_posts = categories_post_join
           .where(categories: { name: names })
           .group("posts.id")
           .having("COUNT(DISTINCT categories.name) = ?", names.size)
           .distinct
         post_ids = filtered_posts.pluck(:id)
-        Post.includes(:categories, user: :organization)
-          .where(id: post_ids)
+        base_scope.where(id: post_ids)
       elsif params[:category_ids].present?
-        categories_post_join = Post.joins(:categories)
+        categories_post_join = base_scope.joins(:categories)
         filtered_posts = categories_post_join
           .where(categories: { id: params[:category_ids] })
           .group("posts.id")
           .having("COUNT(DISTINCT categories.id) = ?", params[:category_ids].size)
           .distinct
         post_ids = filtered_posts.pluck(:id)
-        Post.includes(:categories, user: :organization)
-          .where(id: post_ids)
+        base_scope.where(id: post_ids)
       else
-        Post.includes(:categories, user: :organization).all
+        base_scope.all
       end
     end
 

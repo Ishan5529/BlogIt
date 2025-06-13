@@ -6,7 +6,7 @@ import { PageLoader, PageTitle, Profile } from "components/commons";
 import { useHistory, useParams } from "react-router-dom";
 import { formatDate } from "utils/formatDate";
 
-import { PROFILE_IMAGE_URL } from "../../constants/user_details";
+import { DEFAULT_PROFILE_IMAGE_URL } from "../../constants/user_details";
 
 const Show = () => {
   const [post, setPost] = useState({});
@@ -44,7 +44,9 @@ const Show = () => {
         <PageTitle title={post.title} />
       </div>
       <div className="flex flex-row space-x-6">
-        <Profile profile_img_url={PROFILE_IMAGE_URL} />
+        <Profile
+          profile_img_url={post.user?.profile_img || DEFAULT_PROFILE_IMAGE_URL}
+        />
         <div className="flex flex-col space-y-1">
           <p className="text-gray-600">{post.user.name}</p>
           <p className="text-gray-600">{formatDate(post.updated_at)}</p>

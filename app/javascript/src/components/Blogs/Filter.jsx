@@ -33,9 +33,9 @@ const FilteredBlogs = () => {
         );
         setLoading(false);
       } catch (error) {
-        logger.error(error);
         setAllCategories([]);
         setLoading(false);
+        logger.error(error);
       }
     };
     fetchAllCategories();
@@ -72,9 +72,9 @@ const FilteredBlogs = () => {
       );
       setLoading(false);
     } catch (error) {
-      logger.error(error);
       setShowModal(false);
       setLoading(false);
+      logger.error(error);
     }
   };
 

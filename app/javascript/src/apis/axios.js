@@ -35,8 +35,19 @@ const handleSuccessResponse = response => {
 
 const handleErrorResponse = axiosErrorObject => {
   if (axiosErrorObject.response?.status === 401) {
-    setToLocalStorage({ authToken: null, email: null, userId: null });
-    setTimeout(() => (window.location.href = "/"), 2000);
+    setToLocalStorage({
+      authToken: null,
+      email: null,
+      userId: null,
+    });
+
+    const skipReload =
+      window.location.pathname.startsWith("/login") ||
+      window.location.pathname.startsWith("/signup");
+
+    if (!skipReload) {
+      setTimeout(() => (window.location.href = "/"), 2000);
+    }
   }
 
   Toastr.error(
@@ -55,4 +66,9 @@ const registerIntercepts = () => {
   );
 };
 
-export { setAuthHeaders, registerIntercepts };
+const resetAuthTokens = () => {
+  delete axios.defaults.headers["X-Auth-Email"];
+  delete axios.defaults.headers["X-Auth-Token"];
+};
+
+export { setAuthHeaders, registerIntercepts, resetAuthTokens };

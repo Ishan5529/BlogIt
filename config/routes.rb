@@ -8,9 +8,10 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   constraints(lambda { |req| req.format == :json }) do
     resources :posts, only: %i[index show create], param: :slug
-    resources :users, only: %i[index]
+    resources :users, only: %i[index create]
     resources :organizations, only: %i[index]
     resources :categories, only: %i[index show create], param: :name
+    resource :session, only: [:create, :destroy]
   end
 
   root "home#index"

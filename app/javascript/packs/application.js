@@ -1,4 +1,5 @@
 import "../stylesheets/application.scss";
+import "../../../node_modules/@bigbinary/neetoui/dist/index.css";
 import ReactRailsUJS from "react_ujs";
 import App from "../src/App";
 
