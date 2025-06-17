@@ -67,6 +67,7 @@ class PostsController < ApplicationController
     end
 
     def filter_posts_by_status(base_scope)
+      base_scope = base_scope.includes(user: :organization)
       if params[:status].present?
         base_scope.where(status: params[:status])
       else

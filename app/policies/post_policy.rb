@@ -38,7 +38,7 @@ class PostPolicy
     end
 
     def resolve
-      scope.where(user: { organization_id: user.organization_id })
+      scope.where(user: { organization_id: user.organization_id }, status: :published).or(scope.where(user_id: user.id))
     end
   end
 end

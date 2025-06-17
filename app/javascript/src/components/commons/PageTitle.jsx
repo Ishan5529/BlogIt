@@ -10,7 +10,7 @@ const PageTitle = ({
   enable_button,
   enable_secondary_button,
   enable_options,
-  disabled = false,
+  disabled,
   handleDelete = null,
   handleClick = null,
   handleSecondaryClick = null,
@@ -20,6 +20,7 @@ const PageTitle = ({
   handleClickOptions,
   enable_edit_icon,
   edit_url = "/edit",
+  show_draft,
 }) => {
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
@@ -44,7 +45,14 @@ const PageTitle = ({
 
   return (
     <div className="mt-8 flex items-center justify-between pr-20">
-      <h1 className="text-5xl font-semibold">{title}</h1>
+      <div className="flex flex-row items-center">
+        <h1 className="text-5xl font-semibold">{title}</h1>
+        {show_draft && (
+          <span className="ml-8 mt-2 rounded-xl border border-red-500 px-6 py-0.5 text-red-500">
+            Draft
+          </span>
+        )}
+      </div>
       <div className="flex flex-row space-x-2">
         {enable_secondary_button && (
           <button

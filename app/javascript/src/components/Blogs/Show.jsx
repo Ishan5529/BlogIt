@@ -37,6 +37,8 @@ const Show = () => {
     return <PageLoader />;
   }
 
+  const isDraft = post.status === "draft" && post.user?.id === USER_ID;
+
   return (
     <div className="mt-8 flex h-full flex-col space-y-8 overflow-y-auto pb-20 pl-10 pr-40">
       <div className="space-y-2">
@@ -45,6 +47,7 @@ const Show = () => {
         />
         <PageTitle
           enable_edit_icon={post.user?.id === USER_ID}
+          show_draft={isDraft}
           title={post.title}
           edit_url={
             post.user?.id === USER_ID ? `/blogs/${slug}/edit` : undefined
