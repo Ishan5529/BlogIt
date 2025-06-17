@@ -5,17 +5,20 @@ import React, { useState, useEffect } from "react";
 import categoriesApi from "apis/categories";
 import postsApi from "apis/posts";
 import Form from "components/Blogs/Form";
-import { PageTitle } from "components/commons";
+import { PageTitle, PageLoader } from "components/commons";
 import { useParams } from "react-router-dom";
 
 const Edit = ({ history }) => {
+  const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [status, setStatus] = useState("");
   const [categories, setCategories] = useState([]);
   const [original, setOriginal] = useState({
     title: "",
     content: "",
     categories: [],
+    status: "",
   });
   const [allCategories, setAllCategories] = useState([]);
   const { slug } = useParams();
@@ -50,6 +53,7 @@ const Edit = ({ history }) => {
       } = await postsApi.show(slug);
       setTitle(post.title);
       setContent(post.description);
+      setStatus(post.status);
       setCategories(
         post.categories.map(category => ({
           value: category.id,
@@ -64,8 +68,11 @@ const Edit = ({ history }) => {
           value: category.id,
           label: category.name,
         })),
+        status: post.status,
       });
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       logger.error(error);
     }
   };
@@ -73,6 +80,7 @@ const Edit = ({ history }) => {
   const isUnchanged =
     title === original.title &&
     content === original.content &&
+    status === original.status &&
     JSON.stringify(categories) === JSON.stringify(original.categories);
 
   const handleSubmit = async event => {
@@ -81,6 +89,7 @@ const Edit = ({ history }) => {
       await postsApi.update({
         slug,
         payload: {
+          status,
           title,
           description: content,
           category_ids: categories.map(category => category.value),
@@ -98,11 +107,11 @@ const Edit = ({ history }) => {
       await postsApi.update({
         slug,
         payload: {
+          status,
           title,
           description: content,
           category_ids: categories.map(category => category.value),
           user_id: USER_ID,
-          status: "draft",
         },
       });
       history.push("/");
@@ -120,6 +129,10 @@ const Edit = ({ history }) => {
     }
   };
 
+  if (loading) {
+    return <PageLoader />;
+  }
+
   return (
     <div className="space-y-12 py-4 pl-14">
       <PageTitle
@@ -127,10 +140,12 @@ const Edit = ({ history }) => {
         enable_secondary_button
         button_options={["Publish", "Save as draft"]}
         button_text="Save"
+        changeStatus={[() => setStatus("published"), () => setStatus("draft")]}
         disabled={isUnchanged}
         handleClickOptions={[handleSubmit, handleSaveAsDraft]}
         handleDelete={handleDelete}
         handleSecondaryClick={() => history.push("/")}
+        initialStatus={status === "published" ? 0 : 1}
         secondary_button_text="Cancel"
         title="Edit blog post"
       />

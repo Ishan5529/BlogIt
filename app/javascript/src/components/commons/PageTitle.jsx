@@ -18,13 +18,15 @@ const PageTitle = ({
   secondary_button_text,
   button_options,
   handleClickOptions,
+  initialStatus = 0,
+  changeStatus,
   enable_edit_icon,
   edit_url = "/edit",
   show_draft,
 }) => {
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
-  const [btnIdx, setBtnIdx] = useState(0);
+  const [btnIdx, setBtnIdx] = useState(initialStatus);
   const dropdownRef = useRef(null);
   const menuRef = useRef(null);
 
@@ -119,6 +121,7 @@ const PageTitle = ({
                     onClick={() => {
                       setOpen(false);
                       setBtnIdx(idx);
+                      changeStatus[idx]();
                     }}
                   >
                     {option}
