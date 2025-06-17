@@ -6,6 +6,7 @@ class PostsController < ApplicationController
   def index
     @posts = policy_scope(Post)
     @posts = filter_posts_by_category_name_or_category_id(@posts)
+    @posts = filter_posts_by_status(@posts)
     render
   end
 
@@ -60,6 +61,14 @@ class PostsController < ApplicationController
           .distinct
         post_ids = filtered_posts.pluck(:id)
         base_scope.where(id: post_ids)
+      else
+        base_scope.all
+      end
+    end
+
+    def filter_posts_by_status(base_scope)
+      if params[:status].present?
+        base_scope.where(status: params[:status])
       else
         base_scope.all
       end

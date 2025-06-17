@@ -56,13 +56,11 @@ const Create = ({ history }) => {
   const handleSaveAsDraft = async () => {
     try {
       await postsApi.create({
-        payload: {
-          title,
-          description: content,
-          category_ids: categories.map(category => category.value),
-          user_id: USER_ID,
-          status: "draft",
-        },
+        title,
+        description: content,
+        category_ids: categories.map(category => category.value),
+        user_id: USER_ID,
+        status: "draft",
       });
       history.push("/");
     } catch (error) {

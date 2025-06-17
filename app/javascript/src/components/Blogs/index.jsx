@@ -28,7 +28,7 @@ const Blogs = ({ history, fetchFiltered = false }) => {
     try {
       const {
         data: { posts },
-      } = await postsApi.fetch();
+      } = await postsApi.fetch({ status: "published" });
       setPosts(posts);
       setLoading(false);
     } catch (error) {
@@ -41,7 +41,7 @@ const Blogs = ({ history, fetchFiltered = false }) => {
     try {
       const {
         data: { posts },
-      } = await postsApi.fetch(filterParams);
+      } = await postsApi.fetch({ ...filterParams, status: "published" });
       setPosts(posts);
       setLoading(false);
     } catch (error) {
