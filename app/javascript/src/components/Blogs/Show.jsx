@@ -10,7 +10,12 @@ import { formatDate } from "utils/formatDate";
 
 import { DEFAULT_PROFILE_IMAGE_URL } from "../../constants/user_details";
 
-const Show = () => {
+const Show = ({
+  disable_fetch = false,
+  disable_edit = false,
+  enable_back_btn = false,
+  data,
+}) => {
   const [post, setPost] = useState({});
   const [pageLoading, setPageLoading] = useState(true);
   const { slug } = useParams();
@@ -30,7 +35,12 @@ const Show = () => {
   };
 
   useEffect(() => {
-    fetchPostDetails();
+    if (!disable_fetch) {
+      fetchPostDetails();
+    } else {
+      setPost(data);
+      setPageLoading(false);
+    }
   }, []);
 
   if (pageLoading) {
@@ -46,7 +56,9 @@ const Show = () => {
           categories={post.categories.map(category => category.name)}
         />
         <PageTitle
-          enable_edit_icon={post.user?.id === USER_ID}
+          enable_back_btn={enable_back_btn}
+          enable_edit_icon={post.user?.id === USER_ID && !disable_edit}
+          handleBack={() => history.goBack()}
           show_draft={isDraft}
           title={post.title}
           edit_url={

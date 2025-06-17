@@ -9,12 +9,13 @@ const create = payload =>
     post: payload,
   });
 
-const update = ({ slug, payload }) =>
-  axios.put(`/posts/${slug}`, {
+const update = ({ quiet = false, slug, payload }) =>
+  axios.put(`/posts/${slug}${quiet ? "?quiet" : ""}`, {
     post: payload,
   });
 
-const destroy = slug => axios.delete(`/posts/${slug}`);
+const destroy = ({ slug, quiet }) =>
+  axios.delete(`/posts/${slug}${quiet ? "?quiet" : ""}`);
 
 const postsApi = { fetch, show, create, update, destroy };
 

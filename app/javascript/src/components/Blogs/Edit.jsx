@@ -89,7 +89,7 @@ const Edit = ({ history }) => {
       await postsApi.update({
         slug,
         payload: {
-          status,
+          status: "published",
           title,
           description: content,
           category_ids: categories.map(category => category.value),
@@ -102,19 +102,22 @@ const Edit = ({ history }) => {
     }
   };
 
-  const handleSaveAsDraft = async () => {
+  const handleSaveAsDraft = async ({ skip_dash = false, quiet = false }) => {
     try {
       await postsApi.update({
         slug,
+        quiet,
         payload: {
-          status,
+          status: "draft",
           title,
           description: content,
           category_ids: categories.map(category => category.value),
           user_id: USER_ID,
         },
       });
-      history.push("/");
+      if (!skip_dash) {
+        history.push("/");
+      }
     } catch (error) {
       logger.error(error);
     }
@@ -129,6 +132,13 @@ const Edit = ({ history }) => {
     }
   };
 
+  const showPreview = async () => {
+    setLoading(true);
+    await handleSaveAsDraft({ skip_dash: true, quiet: true });
+    setLoading(false);
+    history.push(`/blogs/${slug}/preview`);
+  };
+
   if (loading) {
     return <PageLoader />;
   }
@@ -137,6 +147,7 @@ const Edit = ({ history }) => {
     <div className="space-y-12 py-4 pl-14">
       <PageTitle
         enable_options
+        enable_preview
         enable_secondary_button
         button_options={["Publish", "Save as draft"]}
         button_text="Save"
@@ -147,6 +158,7 @@ const Edit = ({ history }) => {
         handleSecondaryClick={() => history.push("/")}
         initialStatus={status === "published" ? 0 : 1}
         secondary_button_text="Cancel"
+        showPreview={showPreview}
         title="Edit blog post"
       />
       <Form

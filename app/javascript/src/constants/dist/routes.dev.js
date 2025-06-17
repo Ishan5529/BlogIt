@@ -1,4 +1,10 @@
-export const routes = {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true,
+});
+exports.routes = void 0;
+const routes = {
   root: "/",
   blogs: {
     // index: "/blogs",
@@ -14,3 +20,4 @@ export const routes = {
   signup: "/signup",
   pageNotFound: "/404",
 };
+exports.routes = routes;

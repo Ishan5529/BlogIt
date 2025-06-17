@@ -27,14 +27,14 @@ class PostsController < ApplicationController
     post = Post.find_by!(slug: params[:slug])
     authorize post
     post.update!(post_params)
-    render_notice(t("successfully_updated", entity: "Post"))
+    render_notice(t("successfully_updated", entity: "Post")) unless params.key?(:quiet)
   end
 
   def destroy
     post = Post.find_by!(slug: params[:slug])
     authorize post
     post.destroy!
-    render_notice(t("successfully_deleted", entity: "Post"))
+    render_notice(t("successfully_deleted", entity: "Post")) unless params.key?(:quiet)
   end
 
   private

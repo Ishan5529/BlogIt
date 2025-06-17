@@ -72,10 +72,12 @@ const SideBar = () => {
           className={classNames({
             "text-blue-400":
               pathname === routes.blogs.index ||
-              /^\/blogs\/[^/]+\/show\/?$/.test(pathname),
+              /^\/blogs\/[^/]+\/show\/?$/.test(pathname) ||
+              /^\/blogs\/[^/]+\/preview\/?$/.test(pathname),
             "text-gray-400":
               pathname !== routes.blogs.index &&
-              !/^\/blogs\/[^/]+\/show\/?$/.test(pathname),
+              !/^\/blogs\/[^/]+\/show\/?$/.test(pathname) &&
+              !/^\/blogs\/[^/]+\/preview\/?$/.test(pathname),
           })}
         >
           <List />

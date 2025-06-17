@@ -1,13 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import classnames from "classnames";
 import { Tooltip } from "components/commons";
-import { Edit, MenuHorizontal } from "neetoicons";
+import { Edit, MenuHorizontal, ExternalLink } from "neetoicons";
 import { NavLink } from "react-router-dom";
 
 const PageTitle = ({
   title,
   enable_button,
+  enable_back_btn,
+  handleBack = null,
+  enable_preview,
+  showPreview = null,
   enable_secondary_button,
   enable_options,
   disabled,
@@ -30,7 +34,7 @@ const PageTitle = ({
   const dropdownRef = useRef(null);
   const menuRef = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setOpen(false);
@@ -54,8 +58,27 @@ const PageTitle = ({
             Draft
           </span>
         )}
+        {enable_back_btn && (
+          <div
+            // className="ml-4 rounded bg-gray-100 px-4 py-2 text-black hover:bg-gray-200"
+            className="ml-4 mt-2 cursor-pointer rounded-xl border border-black bg-gray-50 px-6 py-0.5 text-black hover:bg-gray-100"
+            onClick={handleBack}
+          >
+            Back
+          </div>
+        )}
       </div>
       <div className="flex flex-row space-x-2">
+        {enable_preview && (
+          <Tooltip tooltipContent="Preview">
+            <div
+              className="ml-4 cursor-pointer px-2 pt-3 text-gray-500 transition-transform duration-300 hover:scale-110 hover:text-gray-800"
+              onClick={showPreview}
+            >
+              <ExternalLink size={28} />
+            </div>
+          </Tooltip>
+        )}
         {enable_secondary_button && (
           <button
             className="ml-4 rounded bg-gray-100 px-10 py-3 text-black hover:bg-gray-200"
@@ -113,7 +136,7 @@ const PageTitle = ({
               </svg>
             </button>
             {open && (
-              <div className="absolute right-0 z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+              <div className="absolute right-0 z-10 mt-12 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                 {button_options.map((option, idx) => (
                   <button
                     className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
