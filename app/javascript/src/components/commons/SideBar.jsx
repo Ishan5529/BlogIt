@@ -6,7 +6,7 @@ import authApi from "apis/auth";
 import { resetAuthTokens } from "apis/axios";
 import classNames from "classnames";
 import { Profile } from "components/commons";
-import { Book, List, Edit, ListDetails, LeftArrow } from "neetoicons";
+import { Book, List, Edit, ListDetails, LeftArrow, Folder } from "neetoicons";
 import {
   NavLink,
   useLocation,
@@ -83,8 +83,12 @@ const SideBar = () => {
         <NavLink
           to={routes.blogs.create_blog}
           className={classNames({
-            "text-blue-400": pathname === routes.blogs.create_blog,
-            "text-gray-400": pathname !== routes.blogs.create_blog,
+            "text-blue-400":
+              pathname === routes.blogs.create_blog ||
+              /^\/blogs\/[^/]+\/edit\/?$/.test(pathname),
+            "text-gray-400":
+              pathname !== routes.blogs.create_blog &&
+              !/^\/blogs\/[^/]+\/edit\/?$/.test(pathname),
           })}
         >
           <Edit />
@@ -97,6 +101,15 @@ const SideBar = () => {
           })}
         >
           <ListDetails />
+        </NavLink>
+        <NavLink
+          to={routes.blogs.user_blogs}
+          className={classNames({
+            "text-blue-400": pathname === routes.blogs.user_blogs,
+            "text-gray-400": pathname !== routes.blogs.user_blogs,
+          })}
+        >
+          <Folder />
         </NavLink>
       </div>
       <div className="relative" ref={menuRef}>

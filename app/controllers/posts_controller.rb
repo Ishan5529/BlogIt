@@ -22,6 +22,20 @@ class PostsController < ApplicationController
     render_notice(t("successfully_created", entity: "Post"))
   end
 
+  def update
+    post = Post.find_by!(slug: params[:slug])
+    authorize post
+    post.update!(post_params)
+    render_notice(t("successfully_updated", entity: "Post"))
+  end
+
+  def destroy
+    post = Post.find_by!(slug: params[:slug])
+    authorize post
+    post.destroy!
+    render_notice(t("successfully_deleted", entity: "Post"))
+  end
+
   private
 
     def filter_posts_by_category_name_or_category_id(base_scope)
@@ -52,6 +66,6 @@ class PostsController < ApplicationController
     end
 
     def post_params
-      params.require(:post).permit(:title, :description, :user_id, category_ids: [])
+      params.require(:post).permit(:title, :description, :user_id, :status, category_ids: [])
     end
 end

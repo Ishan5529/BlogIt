@@ -28,8 +28,8 @@ const Create = ({ history }) => {
           }))
         );
       } catch (error) {
-        logger.error(error);
         setAllCategories([]);
+        logger.error(error);
       }
     };
     fetchAllCategories();
@@ -53,9 +53,33 @@ const Create = ({ history }) => {
     }
   };
 
+  const handleSaveAsDraft = async () => {
+    try {
+      await postsApi.create({
+        payload: {
+          title,
+          description: content,
+          category_ids: categories.map(category => category.value),
+          user_id: USER_ID,
+          status: "draft",
+        },
+      });
+      history.push("/");
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
   return (
     <div className="space-y-12 py-4 pl-14">
-      <PageTitle title="Add new blog" />
+      <PageTitle
+        enable_secondary_button
+        button_options={["Publish", "Save as draft"]}
+        handleClickOptions={[handleSubmit, handleSaveAsDraft]}
+        handleSecondaryClick={() => history.push("/")}
+        secondary_button_text="Cancel"
+        title="Add new blog"
+      />
       <Form
         allCategories={allCategories}
         categories={categories}

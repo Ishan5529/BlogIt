@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button, Input } from "components/commons";
+import { Input } from "components/commons";
 import Select from "react-select";
 
 const Form = ({
@@ -11,7 +11,6 @@ const Form = ({
   allCategories = [],
   content,
   setContent,
-  loading,
   handleSubmit,
 }) => (
   <div className="mr-32 h-full rounded-2xl border border-gray-300 py-16 pl-16 pr-28 shadow-md">
@@ -27,8 +26,8 @@ const Form = ({
           onChange={e => setTitle(e.target.value.slice(0, 125))}
         />
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">
-            Categories*
+          <label className="mb-2 block text-lg font-medium text-gray-700">
+            Category*
           </label>
           <Select
             isMulti
@@ -41,7 +40,7 @@ const Form = ({
           />
         </div>
         <Input
-          className="h-40 text-left align-top"
+          className="mb-10 h-80 text-left align-top"
           label="Description*"
           placeholder="Blog Description (Max 10000 Characters Allowed)"
           rows={8}
@@ -50,7 +49,7 @@ const Form = ({
           onChange={e => setContent(e.target.value.slice(0, 10000))}
         />
       </div>
-      <div className="mt-24 flex w-full items-center justify-end space-x-4">
+      {/* <div className="mt-24 flex w-full items-center justify-end space-x-4">
         <div className="rounded-md border border-black">
           <Button
             buttonText="Cancel"
@@ -63,11 +62,12 @@ const Form = ({
         <Button
           buttonText="Submit"
           className="w-32"
+          disabled={disabled}
           loading={loading}
           style="primary"
           type="submit"
         />
-      </div>
+      </div> */}
     </form>
   </div>
 );

@@ -37,6 +37,7 @@ en:
   generic_error: "Something went wrong. Please try again later."
   successfully_created: "%{entity} was successfully created!"
   successfully_updated: "%{entity} was successfully updated!"
+  successfully_deleted: "%{entity} was successfully deleted!"
   post:
     slug:
       immutable: "is immutable!"

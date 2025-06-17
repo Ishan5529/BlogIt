@@ -1,3 +1,5 @@
+import { USER_ID } from "constants/user_details";
+
 import React, { useEffect, useState } from "react";
 
 import postsApi from "apis/posts";
@@ -41,7 +43,13 @@ const Show = () => {
         <BlogContent
           categories={post.categories.map(category => category.name)}
         />
-        <PageTitle title={post.title} />
+        <PageTitle
+          enable_edit_icon={post.user?.id === USER_ID}
+          title={post.title}
+          edit_url={
+            post.user?.id === USER_ID ? `/blogs/${slug}/edit` : undefined
+          }
+        />
       </div>
       <div className="flex flex-row space-x-6">
         <Profile

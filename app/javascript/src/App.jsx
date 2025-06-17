@@ -5,6 +5,7 @@ import React from "react";
 import { Login, Signup } from "components/Authentication";
 import Blogs from "components/Blogs";
 import CreatePost from "components/Blogs/Create";
+import EditPost from "components/Blogs/Edit";
 import FilterPost from "components/Blogs/Filter";
 import ShowPost from "components/Blogs/Show";
 import { SideBar, PrivateRoute } from "components/commons";
@@ -35,6 +36,7 @@ const App = () => {
               component={CreatePost}
               path={routes.blogs.create_blog}
             />
+            <Route exact component={EditPost} path={routes.blogs.edit_blog} />
             <Route
               exact
               component={FilterPost}

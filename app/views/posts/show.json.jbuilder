@@ -9,7 +9,8 @@ json.post do
     :downvotes,
     :created_at,
     :updated_at,
-    :slug
+    :slug,
+    :status
 
   json.categories @post.categories do |category|
     json.extract! category,
@@ -21,7 +22,8 @@ json.post do
     json.extract! @post.user,
       :id,
       :name,
-      :email
+      :email,
+      :organization_id
   end
 
   json.organization do
