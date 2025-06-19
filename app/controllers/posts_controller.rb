@@ -7,6 +7,7 @@ class PostsController < ApplicationController
     @posts = policy_scope(Post)
     @posts = filter_posts_by_category_name_or_category_id(@posts)
     @posts = filter_posts_by_status(@posts)
+    @posts = filter_posts_by_user_id(@posts) if params[:user_id].present?
     render
   end
 
@@ -73,6 +74,11 @@ class PostsController < ApplicationController
       else
         base_scope.all
       end
+    end
+
+    def filter_posts_by_user_id(base_scope)
+      base_scope = base_scope.includes(user: :organization)
+      base_scope.where(user_id: params[:user_id])
     end
 
     def post_params

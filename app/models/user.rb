@@ -5,6 +5,7 @@ class User < ApplicationRecord
   MAX_EMAIL_LENGTH = 255
   MAX_PASSWORD_LENGTH = 72
   MIN_PASSWORD_LENGTH = 8
+
   belongs_to :organization
   has_many :posts, dependent: :destroy
 
@@ -18,7 +19,13 @@ class User < ApplicationRecord
   has_secure_password
   has_secure_token :authentication_token
 
+  before_save :to_lowercase
+
   private
+
+    def to_lowercase
+      email.downcase!
+    end
 
     def password_required?
       new_record? || !password.nil?

@@ -10,8 +10,10 @@ FactoryBot.define do
     is_bloggable { [true, false].sample }
     status { ["draft", "published"].sample }
 
-    after(:build) do |post|
-      post.categories << build_list(:category, 2)
+    after(:build) do |post, evaluator|
+      if post.categories.empty?
+        post.categories << build_list(:category, 2)
+      end
     end
   end
 end

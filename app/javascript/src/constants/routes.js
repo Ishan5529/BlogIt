@@ -1,3 +1,5 @@
+import { USER_ID, USER_NAME } from "constants/user_details";
+
 export const routes = {
   root: "/",
   blogs: {
@@ -8,7 +10,7 @@ export const routes = {
     show_blog: "/blogs/:slug/show",
     filter_blogs: "/blogs/filter",
     preview_blog: "/blogs/:slug/preview",
-    user_blogs: "/blogs/user/:userId",
+    user_blogs: `/blogs/user/${USER_NAME}-${USER_ID}`,
   },
   login: "/login",
   signup: "/signup",

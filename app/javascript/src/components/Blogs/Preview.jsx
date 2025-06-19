@@ -11,10 +11,6 @@ const Preview = () => {
   const { slug } = useParams();
   const history = useHistory();
 
-  const handleBack = () => {
-    history.goBack();
-  };
-
   const fetchPostDetails = async () => {
     try {
       const {
@@ -37,9 +33,7 @@ const Preview = () => {
     return <PageLoader />;
   }
 
-  return (
-    <Show disable_edit disable_fetch data={post} enable_back_btn={handleBack} />
-  );
+  return <Show disable_edit disable_fetch enable_back_btn data={post} />;
 };
 
 export default Preview;

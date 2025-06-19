@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 class Category < ApplicationRecord
+  MAX_NAME_LENGTH = 255
+
   has_and_belongs_to_many :posts
-  validates :name, presence: true, uniqueness: { case_sensitive: false }
+
+  validates :name, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_NAME_LENGTH }
+
   after_destroy :destroy_orphan_posts
   before_destroy :store_post_ids
 
