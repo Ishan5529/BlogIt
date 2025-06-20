@@ -41,3 +41,4 @@ en:
   post:
     slug:
       immutable: "is immutable!"
+    not_found: "Couldn't find Post"

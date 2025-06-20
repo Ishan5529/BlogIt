@@ -13,9 +13,9 @@ class PostPolicy
     post.user.organization_id == user.organization_id
   end
 
-  def edit?
-    show?
-  end
+  # def edit?
+  #   show?
+  # end
 
   def update?
     post.user_id == user.id

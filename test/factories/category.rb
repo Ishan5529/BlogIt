@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :category do
-    name { Faker::Lorem.word }
+    sequence(:name) { |n| "Category#{n}_#{Faker::Lorem.unique.word}" }
   end
 end

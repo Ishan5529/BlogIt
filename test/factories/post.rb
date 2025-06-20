@@ -12,7 +12,7 @@ FactoryBot.define do
 
     after(:build) do |post, evaluator|
       if post.categories.empty?
-        post.categories << build_list(:category, 2)
+        post.categories << create_list(:category, 2)
       end
     end
   end
