@@ -6,7 +6,13 @@ import { CheckboxInactive, MenuHorizontal } from "neetoicons";
 import { capitalize } from "utils/capitalize";
 import { formatDateTime } from "utils/formatDateTime";
 
-const Row = ({ data, destroyPost, editPost, handleStatusToggle }) => {
+const Row = ({
+  data,
+  destroyPost,
+  editPost,
+  handleStatusToggle,
+  selectedColumns,
+}) => {
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRefs = useRef({});
 
@@ -46,22 +52,28 @@ const Row = ({ data, destroyPost, editPost, handleStatusToggle }) => {
             </td>
             <td onClick={() => editPost(rowData.slug)}>
               <Tooltip tooltipContent={rowData.title}>
-                <p className="max-w-2xl cursor-pointer overflow-hidden truncate whitespace-nowrap text-green-600 focus:text-green-700">
+                <p className="max-w-2xl cursor-pointer overflow-hidden truncate whitespace-nowrap text-green-600 hover:text-green-800">
                   {rowData.title}
                 </p>
               </Tooltip>
             </td>
-            <td>
-              <span>
-                {rowData.categories.map(category => category.name).join(", ")}
-              </span>
-            </td>
-            <td>
-              <span>{formatDateTime(rowData.last_published_at)}</span>
-            </td>
-            <td>
-              <span>{capitalize(rowData.status)}</span>
-            </td>
+            {selectedColumns.includes("category") && (
+              <td>
+                <span>
+                  {rowData.categories.map(category => category.name).join(", ")}
+                </span>
+              </td>
+            )}
+            {selectedColumns.includes("last_published_at") && (
+              <td>
+                <span>{formatDateTime(rowData.last_published_at)}</span>
+              </td>
+            )}
+            {selectedColumns.includes("status") && (
+              <td>
+                <span>{capitalize(rowData.status)}</span>
+              </td>
+            )}
             <td>
               <div
                 className="relative"
