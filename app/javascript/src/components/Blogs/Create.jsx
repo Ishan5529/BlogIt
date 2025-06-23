@@ -44,6 +44,7 @@ const Create = ({ history }) => {
         description: content,
         category_ids: categories.map(category => category.value),
         user_id: USER_ID,
+        status: "published",
       });
       setLoading(false);
       history.push("/blogs");

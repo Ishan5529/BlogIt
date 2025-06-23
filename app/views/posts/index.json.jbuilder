@@ -9,6 +9,7 @@ json.posts @posts do |post|
     :downvotes,
     :created_at,
     :updated_at,
+    :last_published_at,
     :slug,
     :status
 

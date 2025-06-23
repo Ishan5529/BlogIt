@@ -57,7 +57,7 @@ const Row = ({ data, destroyPost, editPost, handleStatusToggle }) => {
               </span>
             </td>
             <td>
-              <span>{formatDateTime(rowData.updated_at)}</span>
+              <span>{formatDateTime(rowData.last_published_at)}</span>
             </td>
             <td>
               <span>{capitalize(rowData.status)}</span>

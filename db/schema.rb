@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_18_115250) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_23_055804) do
   create_table "categories", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -43,6 +43,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_18_115250) do
     t.string "slug", null: false
     t.integer "user_id"
     t.string "status", default: "published", null: false
+    t.datetime "last_published_at"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
   end
 

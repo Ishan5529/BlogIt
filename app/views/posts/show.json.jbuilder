@@ -9,6 +9,7 @@ json.post do
     :downvotes,
     :created_at,
     :updated_at,
+    :last_published_at,
     :slug,
     :status
 

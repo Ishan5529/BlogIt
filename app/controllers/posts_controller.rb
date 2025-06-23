@@ -18,7 +18,8 @@ class PostsController < ApplicationController
   end
 
   def create
-    post = Post.new(post_params)
+    # post = Post.new(post_params)
+    post = create_post
     authorize post
     post.save!
     render_notice(t("successfully_created", entity: "Post"))
@@ -27,7 +28,8 @@ class PostsController < ApplicationController
   def update
     post = Post.find_by!(slug: params[:slug])
     authorize post
-    post.update!(post_params)
+    # post.update!(post_params)
+    update_post(post)
     render_notice(t("successfully_updated", entity: "Post")) unless params.key?(:quiet)
   end
 
@@ -39,6 +41,18 @@ class PostsController < ApplicationController
   end
 
   private
+
+    def create_post
+      attrs = post_params.to_h.symbolize_keys
+      attrs[:last_published_at] = Time.current if attrs[:status] == "published"
+      Post.new(attrs)
+    end
+
+    def update_post(post)
+      attrs = post_params.to_h.symbolize_keys
+      attrs[:last_published_at] = Time.current if attrs[:status] == "published"
+      post.update!(attrs)
+    end
 
     def filter_posts_by_category_name_or_category_id(base_scope)
       base_scope = base_scope.includes(user: :organization)
@@ -82,6 +96,6 @@ class PostsController < ApplicationController
     end
 
     def post_params
-      params.require(:post).permit(:title, :description, :user_id, :status, category_ids: [])
+      params.require(:post).permit(:title, :description, :user_id, :status, :last_published_at, category_ids: [])
     end
 end

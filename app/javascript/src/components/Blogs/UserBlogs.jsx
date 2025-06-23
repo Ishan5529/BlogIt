@@ -10,9 +10,32 @@ import Table from "./Table";
 const UserBlogs = ({ history }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  // const [selectedColumns, setSelectedColumns] = useState([
+  //   "title",
+  //   "category",
+  //   "last_published_at",
+  //   "status",
+  // ]);
 
+  // const sortPosts = data =>
+  //   data.sort(
+  //     (a, b) => new Date(b.last_published_at) - new Date(a._last_published_at)
+  //   );
   const sortPosts = data =>
-    data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+    data.sort((a, b) => {
+      const getValidDate = post => {
+        if (post.status === "published") {
+          return new Date(post.last_published_at);
+        }
+
+        return new Date(post.updated_at);
+      };
+
+      const dateA = getValidDate(a);
+      const dateB = getValidDate(b);
+
+      return dateB - dateA;
+    });
 
   useEffect(() => {
     fetchUserBlogs();
@@ -59,7 +82,15 @@ const UserBlogs = ({ history }) => {
       await postsApi.update({ quiet: true, slug, payload: { status } });
       const updatedPosts = posts.map(p =>
         p.slug === slug
-          ? { ...p, status, updated_at: new Date().toISOString() }
+          ? {
+              ...p,
+              status,
+              updated_at: new Date().toISOString(),
+              last_published_at:
+                status === "published"
+                  ? new Date().toISOString()
+                  : p.last_published_at,
+            }
           : p
       );
       setPosts(sortPosts(updatedPosts));

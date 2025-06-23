@@ -1,4 +1,5 @@
 export const formatDateTime = datetimeStr => {
+  if (!datetimeStr) return "-";
   const date = new Date(datetimeStr);
 
   return date.toLocaleString("en-US", {
