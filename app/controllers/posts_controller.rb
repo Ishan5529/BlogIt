@@ -4,10 +4,8 @@ class PostsController < ApplicationController
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
   def index
-    @posts = policy_scope(Post)
-    @posts = filter_posts_by_category_name_or_category_id(@posts)
-    @posts = filter_posts_by_status(@posts)
-    @posts = filter_posts_by_user_id(@posts) if params[:user_id].present?
+    pundit_scope = policy_scope(Post)
+    @posts = Posts::FilterService.new(pundit_scope, filter_params).call
     render
   end
 
@@ -18,7 +16,6 @@ class PostsController < ApplicationController
   end
 
   def create
-    # post = Post.new(post_params)
     post = create_post
     authorize post
     post.save!
@@ -28,7 +25,6 @@ class PostsController < ApplicationController
   def update
     post = Post.find_by!(slug: params[:slug])
     authorize post
-    # post.update!(post_params)
     update_post(post)
     render_notice(t("successfully_updated", entity: "Post")) unless params.key?(:quiet)
   end
@@ -54,48 +50,11 @@ class PostsController < ApplicationController
       post.update!(attrs)
     end
 
-    def filter_posts_by_category_name_or_category_id(base_scope)
-      base_scope = base_scope.includes(user: :organization)
-
-      if params[:category_names].present?
-        names = params[:category_names]
-        categories_post_join = base_scope.joins(:categories)
-        filtered_posts = categories_post_join
-          .where(categories: { name: names })
-          .group("posts.id")
-          .having("COUNT(DISTINCT categories.name) = ?", names.size)
-          .distinct
-        post_ids = filtered_posts.pluck(:id)
-        base_scope.where(id: post_ids)
-      elsif params[:category_ids].present?
-        categories_post_join = base_scope.joins(:categories)
-        filtered_posts = categories_post_join
-          .where(categories: { id: params[:category_ids] })
-          .group("posts.id")
-          .having("COUNT(DISTINCT categories.id) = ?", params[:category_ids].size)
-          .distinct
-        post_ids = filtered_posts.pluck(:id)
-        base_scope.where(id: post_ids)
-      else
-        base_scope.all
-      end
-    end
-
-    def filter_posts_by_status(base_scope)
-      base_scope = base_scope.includes(user: :organization)
-      if params[:status].present?
-        base_scope.where(status: params[:status])
-      else
-        base_scope.all
-      end
-    end
-
-    def filter_posts_by_user_id(base_scope)
-      base_scope = base_scope.includes(user: :organization)
-      base_scope.where(user_id: params[:user_id])
-    end
-
     def post_params
       params.require(:post).permit(:title, :description, :user_id, :status, :last_published_at, category_ids: [])
+    end
+
+    def filter_params
+      params.permit(:title, :status, :user_id, category_ids: [], category_names: [])
     end
 end

@@ -13,10 +13,6 @@ class PostPolicy
     post.user.organization_id == user.organization_id
   end
 
-  # def edit?
-  #   show?
-  # end
-
   def update?
     post.user_id == user.id
   end
@@ -38,7 +34,10 @@ class PostPolicy
     end
 
     def resolve
-      scope.where(user: { organization_id: user.organization_id }, status: :published).or(scope.where(user_id: user.id))
+      # scope.where(user: { organization_id: user.organization_id }, status: :published).or(scope.where(user_id: user.id))
+      scope.joins(:user).where(
+        users: { organization_id: user.organization_id },
+        status: :published).or(scope.where(user_id: user.id))
     end
   end
 end
