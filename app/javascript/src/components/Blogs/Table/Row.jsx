@@ -2,16 +2,18 @@ import React, { useState, useEffect, useRef } from "react";
 
 import classnames from "classnames";
 import { Tooltip } from "components/commons";
-import { CheckboxInactive, MenuHorizontal } from "neetoicons";
+import { CheckboxInactive, Checkbox, MenuHorizontal } from "neetoicons";
 import { capitalize } from "utils/capitalize";
 import { formatDateTime } from "utils/formatDateTime";
 
 const Row = ({
-  data,
+  data = [],
   destroyPost,
   editPost,
   handleStatusToggle,
   selectedColumns,
+  selectedPosts,
+  setSelectedPosts,
 }) => {
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRefs = useRef({});
@@ -28,6 +30,15 @@ const Row = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [openMenuId]);
 
+  const handleSelectedPosts = rowData => {
+    const isSelected = selectedPosts.some(post => post.id === rowData.id);
+    if (isSelected) {
+      setSelectedPosts(selectedPosts.filter(post => post.id !== rowData.id));
+    } else {
+      setSelectedPosts([...selectedPosts, rowData]);
+    }
+  };
+
   return (
     <tbody className="divide-y divide-gray-200 bg-white">
       {data.map((rowData, idx) => {
@@ -43,11 +54,21 @@ const Row = ({
             })}
           >
             <td>
-              <div className="flex w-full items-center justify-center py-2.5">
-                <CheckboxInactive
-                  className="cursor-pointer text-gray-300 hover:text-gray-400"
-                  size={20}
-                />
+              <div
+                className="flex w-full items-center justify-center py-2.5"
+                onClick={() => handleSelectedPosts(rowData)}
+              >
+                {selectedPosts.some(post => post.id === rowData.id) ? (
+                  <Checkbox
+                    className="cursor-pointer text-green-800 hover:text-green-700"
+                    size={20}
+                  />
+                ) : (
+                  <CheckboxInactive
+                    className="cursor-pointer text-gray-300 hover:text-gray-400"
+                    size={20}
+                  />
+                )}
               </div>
             </td>
             <td onClick={() => editPost(rowData.slug)}>

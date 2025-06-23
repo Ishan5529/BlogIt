@@ -26,6 +26,7 @@ const UserBlogs = ({ history }) => {
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("");
   const [allCategories, setAllCategories] = useState([]);
+  const [selectedPosts, setSelectedPosts] = useState([]);
 
   const allColumns = ["title", "category", "last_published_at", "status"];
 
@@ -136,8 +137,10 @@ const UserBlogs = ({ history }) => {
     const filters = {
       title,
       status: status?.value,
-      category_ids: categories.map(c => c.value),
+      category_names: categories.map(c => c.label),
     };
+    const query = buildSortedQuery(filters);
+    history.replace({ search: query ? `?${query}` : "" });
     await fetchUserBlogs(filters);
     setIsPaneOpen(false);
   };
@@ -146,6 +149,20 @@ const UserBlogs = ({ history }) => {
     setTitle("");
     setCategories([]);
     setStatus("");
+  };
+
+  const buildSortedQuery = params => {
+    const entries = Object.entries(params)
+      .filter(
+        ([, value]) => value && (Array.isArray(value) ? value.length > 0 : true)
+      )
+      .map(([key, value]) => [
+        key,
+        Array.isArray(value) ? value.join(",") : value,
+      ])
+      .sort(([a], [b]) => a.localeCompare(b));
+
+    return new URLSearchParams(entries).toString();
   };
 
   return (
@@ -289,6 +306,8 @@ const UserBlogs = ({ history }) => {
         editPost={editPost}
         handleStatusToggle={handleStatusToggle}
         selectedColumns={selectedColumns}
+        selectedPosts={selectedPosts}
+        setSelectedPosts={setSelectedPosts}
       />
     </div>
   );

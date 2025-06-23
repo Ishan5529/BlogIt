@@ -9,16 +9,25 @@ const Table = ({
   editPost,
   handleStatusToggle,
   selectedColumns,
+  selectedPosts,
+  setSelectedPosts,
 }) => (
   <div className="inline-block w-full">
     <table className="w-full border-collapse">
-      <Header selectedColumns={selectedColumns} />
+      <Header
+        data={data}
+        selectedColumns={selectedColumns}
+        selectedPosts={selectedPosts}
+        setSelectedPosts={setSelectedPosts}
+      />
       <Row
         data={data}
         destroyPost={destroyPost}
         editPost={editPost}
         handleStatusToggle={handleStatusToggle}
         selectedColumns={selectedColumns}
+        selectedPosts={selectedPosts}
+        setSelectedPosts={setSelectedPosts}
       />
     </table>
   </div>
