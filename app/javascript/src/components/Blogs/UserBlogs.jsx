@@ -5,8 +5,9 @@ import React, { useState, useEffect } from "react";
 import categoriesApi from "apis/categories";
 import postsApi from "apis/posts";
 import { PageTitle, PageLoader, Input, Button } from "components/commons";
-import { Filter, Down } from "neetoicons";
-import { Typography, Pane } from "neetoui";
+import { Filter, Down, Delete } from "neetoicons";
+import { Typography, Pane, Alert, Tag } from "neetoui";
+import { isEmpty } from "ramda";
 import Select from "react-select";
 
 import Table from "./Table";
@@ -15,6 +16,7 @@ const UserBlogs = ({ history }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openMenu, setOpenMenu] = useState(false);
+  const [openSelectMenu, setOpenSelectMenu] = useState(false);
   const [isPaneOpen, setIsPaneOpen] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState([
     "title",
@@ -27,8 +29,15 @@ const UserBlogs = ({ history }) => {
   const [status, setStatus] = useState("");
   const [allCategories, setAllCategories] = useState([]);
   const [selectedPosts, setSelectedPosts] = useState([]);
+  const [filtered, setFiltered] = useState(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [tagRemoved, setTagRemoved] = useState(false);
 
   const allColumns = ["title", "category", "last_published_at", "status"];
+  const allStatuses = [
+    { value: "published", label: "Publish" },
+    { value: "draft", label: "Draft" },
+  ];
 
   const sortPosts = data =>
     data.sort((a, b) => {
@@ -70,6 +79,13 @@ const UserBlogs = ({ history }) => {
   useEffect(() => {
     fetchUserBlogs();
   }, []);
+
+  useEffect(() => {
+    if (filtered) {
+      handleFilterSubmit();
+      checkEmpty();
+    }
+  }, [tagRemoved]);
 
   const fetchUserBlogs = async (filters = {}) => {
     try {
@@ -132,6 +148,13 @@ const UserBlogs = ({ history }) => {
     setOpenMenu(!openMenu);
   };
 
+  const checkEmpty = () => {
+    if (isEmpty(title) && isEmpty(categories) && !status) {
+      setFiltered(false);
+      handleFilterReset();
+    }
+  };
+
   const handleFilterSubmit = async () => {
     setLoading(true);
     const filters = {
@@ -143,12 +166,18 @@ const UserBlogs = ({ history }) => {
     history.replace({ search: query ? `?${query}` : "" });
     await fetchUserBlogs(filters);
     setIsPaneOpen(false);
+    setFiltered(true);
+    checkEmpty();
+    setLoading(false);
   };
 
   const handleFilterReset = () => {
     setTitle("");
     setCategories([]);
     setStatus("");
+    setFiltered(false);
+    history.replace({ search: "" });
+    fetchUserBlogs();
   };
 
   const buildSortedQuery = params => {
@@ -165,12 +194,107 @@ const UserBlogs = ({ history }) => {
     return new URLSearchParams(entries).toString();
   };
 
+  const displayRecordCount = () => {
+    if (!isEmpty(selectedPosts)) {
+      return `${selectedPosts.length} ${
+        selectedPosts.length === 1 ? "article" : "articles"
+      } selected of ${posts.length}`;
+    }
+
+    const count = posts.length;
+    if (filtered) {
+      return `${count} ${count === 1 ? "result" : "results"} for \u00A0\u00A0${
+        title ? `"${title}"\u00A0\u00A0` : ""
+      }`;
+    }
+
+    return `${count} ${count === 1 ? "article" : "articles"}`;
+  };
+
+  const displayRecordButtons = () => {
+    if (!isEmpty(selectedPosts)) {
+      return (
+        <>
+          <div
+            className="relative ml-4 flex h-full cursor-pointer flex-row items-center rounded-md bg-gray-200 px-2.5 text-sm text-gray-700 hover:bg-gray-300"
+            onClick={() => setOpenSelectMenu(!openSelectMenu)}
+          >
+            Change status <Down className="text-gray-700" size={20} />
+            {openSelectMenu && (
+              <div className="absolute right-1 top-8 z-10 mt-2 flex w-48 flex-col space-y-2 rounded-md border bg-white p-3 shadow-lg">
+                {allStatuses.map(status => (
+                  <div
+                    className="flex cursor-pointer items-center space-x-2"
+                    key={status.value}
+                    onClick={async () => {
+                      await Promise.all(
+                        selectedPosts
+                          .filter(post => post.status !== status.value)
+                          .map(post =>
+                            handleStatusToggle(post.slug, status.value)
+                          )
+                      );
+                      setSelectedPosts([]);
+                      setOpenSelectMenu(false);
+                      fetchUserBlogs();
+                    }}
+                  >
+                    {status.label}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <div
+            className="ml-4 flex h-full cursor-pointer flex-row items-center rounded-md bg-red-100 px-2.5 text-sm text-red-600 hover:bg-red-200"
+            onClick={() => setShowDeleteAlert(true)}
+          >
+            Delete &nbsp; <Delete className="text-red-600" size={20} />
+          </div>
+        </>
+      );
+    }
+
+    if (filtered) {
+      const removeCategory = category => {
+        setCategories(prev => prev.filter(c => c.value !== category));
+        setTagRemoved(prev => !prev);
+      };
+
+      return (
+        <div className="flex h-full items-center space-x-2">
+          {categories.map((category, index) => (
+            <Tag
+              key={index}
+              label={category.label}
+              style="secondary"
+              onClose={() => removeCategory(category.value)}
+            />
+          ))}
+          {status && (
+            <Tag
+              label={status.label}
+              style={`${status.value === "draft" ? "danger" : "success"}`}
+              onClose={() => {
+                setStatus("");
+                setTagRemoved(prev => !prev);
+              }}
+            />
+          )}
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div className="mt-8 flex h-full flex-col space-y-6 overflow-y-auto pb-20 pl-10 pr-40">
       <PageTitle title="My blog posts" />
       <div className="flex items-center justify-between">
-        <p className="text-xl font-medium">
-          {posts.length} {posts.length === 1 ? "article" : "articles"}
+        <p className="flex h-8 flex-row text-xl font-medium">
+          {displayRecordCount()}
+          {displayRecordButtons()}
         </p>
         <div className="flex items-center space-x-4">
           <div
@@ -232,7 +356,10 @@ const UserBlogs = ({ history }) => {
             <Pane
               className="w-1/3"
               isOpen={isPaneOpen}
-              onClose={() => setIsPaneOpen(false)}
+              onClose={() => {
+                setIsPaneOpen(false);
+                handleFilterSubmit();
+              }}
             >
               <div className="flex h-full flex-col justify-between px-8 py-10">
                 <div>
@@ -308,6 +435,21 @@ const UserBlogs = ({ history }) => {
         selectedColumns={selectedColumns}
         selectedPosts={selectedPosts}
         setSelectedPosts={setSelectedPosts}
+      />
+      <Alert
+        cancelButtonLabel="Cancel"
+        isOpen={showDeleteAlert}
+        message="Are you sure you want to delete all selected posts? This action cannot be undone."
+        submitButtonLabel="Delete"
+        title="Delete Posts"
+        onClose={() => setShowDeleteAlert(false)}
+        onSubmit={async () => {
+          await Promise.all(selectedPosts.map(post => destroyPost(post.slug)));
+          setPosts(posts.filter(post => !selectedPosts.includes(post)));
+          setOpenSelectMenu(false);
+          setSelectedPosts([]);
+          setShowDeleteAlert(false);
+        }}
       />
     </div>
   );
