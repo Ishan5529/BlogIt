@@ -51,10 +51,12 @@ class PostsController < ApplicationController
     end
 
     def post_params
-      params.require(:post).permit(:title, :description, :user_id, :status, :last_published_at, category_ids: [])
+      params.require(:post).permit(
+        :title, :description, :user_id, :upvotes, :downvotes, :status, :last_published_at,
+        category_ids: [])
     end
 
     def filter_params
-      params.permit(:title, :status, :user_id, category_ids: [], category_names: [])
+      params.permit(:title, :status, :user_id, :upvotes, :downvotes, category_ids: [], category_names: [])
     end
 end

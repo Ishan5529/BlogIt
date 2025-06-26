@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   belongs_to :organization
   has_many :posts, dependent: :destroy
+  has_many :votes, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: MAX_NAME_LENGTH }
   validates :email, presence: true, length: { maximum: MAX_EMAIL_LENGTH }, uniqueness: true,

@@ -7,7 +7,9 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
   constraints(lambda { |req| req.format == :json }) do
-    resources :posts, only: %i[index show create update destroy], param: :slug
+    resources :posts, only: %i[index show create update destroy], param: :slug do
+      resource :vote, only: [:show, :create, :destroy]
+    end
     resources :users, only: %i[index create]
     resources :organizations, only: %i[index]
     resources :categories, only: %i[index show create], param: :name

@@ -8,6 +8,7 @@ class Post < ApplicationRecord
 
   has_and_belongs_to_many :categories
   belongs_to :user
+  has_many :votes, dependent: :destroy
 
   validates :categories, presence: true
   validates :title, presence: true, length: { maximum: MAX_TITLE_LENGTH }
@@ -18,6 +19,14 @@ class Post < ApplicationRecord
   validate :slug_not_changed
 
   before_create :set_slug
+
+  def upvotes_count
+    votes.upvote.count
+  end
+
+  def downvotes_count
+    votes.downvote.count
+  end
 
   private
 
