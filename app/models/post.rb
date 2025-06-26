@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
+  require Rails.root.join("config/initializers/constants.rb")
+
   MAX_TITLE_LENGTH = 125
   MAX_DESCRIPTION_LENGTH = 10000
 
@@ -19,6 +21,7 @@ class Post < ApplicationRecord
   validate :slug_not_changed
 
   before_create :set_slug
+  before_save :set_last_published_at
 
   def upvotes_count
     votes.upvote.count
@@ -28,7 +31,19 @@ class Post < ApplicationRecord
     votes.downvote.count
   end
 
+  def update_bloggable_status_from_votes!
+    threshold = Constants::BLOGGABLE_THRESHOLD
+    net_votes = votes.upvote.count - votes.downvote.count
+    update_column(:is_bloggable, net_votes >= threshold)
+  end
+
   private
+
+    def set_last_published_at
+      if status == "published"
+        self.last_published_at = Time.current
+      end
+    end
 
     def set_slug
       title_slug = title.parameterize

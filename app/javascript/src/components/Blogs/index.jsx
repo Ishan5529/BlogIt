@@ -1,3 +1,4 @@
+import { BLOGGABLE_THRESHOLD } from "constants";
 import { routes } from "constants/routes";
 
 import React, { useState, useEffect } from "react";
@@ -110,6 +111,9 @@ const Blogs = ({ history, fetchFiltered = false }) => {
                   ...post,
                   upvotes: response.data.upvotes,
                   downvotes: response.data.downvotes,
+                  is_bloggable:
+                    response.data.upvotes - response.data.downvotes >=
+                    BLOGGABLE_THRESHOLD,
                 }
               : post
           )
@@ -145,6 +149,9 @@ const Blogs = ({ history, fetchFiltered = false }) => {
                   ...post,
                   upvotes: response.data.upvotes,
                   downvotes: response.data.downvotes,
+                  is_bloggable:
+                    response.data.upvotes - response.data.downvotes >=
+                    BLOGGABLE_THRESHOLD,
                 }
               : post
           )
@@ -196,7 +203,7 @@ const Blogs = ({ history, fetchFiltered = false }) => {
             slug,
             upvotes,
             downvotes,
-            isBloggable,
+            is_bloggable,
             categories,
             user: { name },
           }) => {
@@ -213,7 +220,7 @@ const Blogs = ({ history, fetchFiltered = false }) => {
                 <Blog
                   categories={categories.map(category => category.name)}
                   date={formatDate(updated_at)}
-                  isBloggable={isBloggable}
+                  isBloggable={is_bloggable}
                   name={name}
                   showPost={showPost}
                   slug={slug}

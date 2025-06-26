@@ -12,6 +12,8 @@ class Vote < ApplicationRecord
 
   after_save :update_post_vote_counts
   after_destroy :update_post_vote_counts
+  after_save :update_post_bloggable_status
+  after_destroy :update_post_bloggable_status
 
   private
 
@@ -20,5 +22,9 @@ class Vote < ApplicationRecord
         upvotes: post.votes.upvote.count,
         downvotes: post.votes.downvote.count
       )
+    end
+
+    def update_post_bloggable_status
+      post.update_bloggable_status_from_votes!
     end
 end

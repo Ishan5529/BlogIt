@@ -6,4 +6,6 @@ const TOASTR_OPTIONS = {
   theme: "colored",
 };
 
-export { TOASTR_OPTIONS };
+const BLOGGABLE_THRESHOLD = 40;
+
+export { TOASTR_OPTIONS, BLOGGABLE_THRESHOLD };

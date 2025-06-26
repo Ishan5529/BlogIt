@@ -7,6 +7,7 @@ json.post do
     :description,
     :upvotes,
     :downvotes,
+    :is_bloggable,
     :created_at,
     :updated_at,
     :last_published_at,
