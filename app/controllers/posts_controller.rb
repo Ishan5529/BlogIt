@@ -25,8 +25,19 @@ class PostsController < ApplicationController
   def update
     post = Post.find_by!(slug: params[:slug])
     authorize post
-    post.update!(post_params)
-    render_notice(t("successfully_updated", entity: "Post")) unless params.key?(:quiet)
+    retries = 0
+    begin
+      post.update!(post_params)
+      render_notice(t("successfully_updated", entity: "Post")) unless params.key?(:quiet)
+    rescue ActiveRecord::StatementInvalid => e
+      if e.message.include?("database is locked") && retries < 5
+        retries += 1
+        sleep 0.1
+        retry
+      else
+        raise
+      end
+    end
   end
 
   def destroy
