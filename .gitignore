@@ -34,7 +34,7 @@ test/fixtures
 /config/master.key
 
 # Ignore environment variables
-/.env
+# /.env
 /.env.development.local
 
 #---------------------------------------#
