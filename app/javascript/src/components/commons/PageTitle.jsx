@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 import classnames from "classnames";
 import { Tooltip } from "components/commons";
-import { Edit, MenuHorizontal, ExternalLink } from "neetoicons";
+import { Edit, MenuHorizontal, ExternalLink, Download } from "neetoicons";
 import { NavLink } from "react-router-dom";
 
 const PageTitle = ({
@@ -24,6 +24,8 @@ const PageTitle = ({
   handleClickOptions,
   initialStatus = 0,
   changeStatus,
+  enable_download_icon,
+  download_url,
   enable_edit_icon,
   edit_url = "/edit",
   show_draft,
@@ -153,6 +155,16 @@ const PageTitle = ({
               </div>
             )}
           </div>
+        )}
+        {enable_download_icon && (
+          <Tooltip tooltipContent="Download">
+            <NavLink
+              className="ml-2 mr-4 text-gray-400 hover:text-gray-500"
+              to={download_url}
+            >
+              <Download size="32px" />
+            </NavLink>
+          </Tooltip>
         )}
         {enable_edit_icon && (
           <Tooltip tooltipContent="Edit">

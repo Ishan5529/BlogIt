@@ -11,6 +11,7 @@ export const routes = {
     filter_blogs: "/blogs/filter",
     preview_blog: "/blogs/:slug/preview",
     user_blogs: `/blogs/user/${USER_NAME}-${USER_ID}`,
+    download: "/blogs/:slug/download",
   },
   login: "/login",
   signup: "/signup",

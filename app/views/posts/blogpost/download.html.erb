@@ -1,0 +1,17 @@
+<div class="mb-4 font-bold">Your post:</div>
+<div class="p-4 mb-8 bg-white neeto-ui-shadow-s rounded">
+  <div class="flexrow w-full mb-4">
+    <span>
+      <% if @post.status === "published" %>
+      <input type="checkbox" checked>
+      <% else %>
+      <input type="checkbox">
+      <% end %>
+    </span>
+    <div class="ml-4">
+      <div class="mb-1">
+        <div class="text-gray-500"><%= @post.title %></div>
+      </div>
+    </div>
+  </div>
+</div>

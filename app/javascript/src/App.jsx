@@ -5,6 +5,7 @@ import React from "react";
 import { Login, Signup } from "components/Authentication";
 import Blogs from "components/Blogs";
 import CreatePost from "components/Blogs/Create";
+import DownloadBlog from "components/Blogs/DownloadBlog";
 import EditPost from "components/Blogs/Edit";
 import FilterPost from "components/Blogs/Filter";
 import PreviewPost from "components/Blogs/Preview";
@@ -50,6 +51,12 @@ const App = () => {
               path={routes.blogs.preview_blog}
             />
             <Route exact component={UserBlogs} path={routes.blogs.user_blogs} />
+            <Route
+              exact
+              component={DownloadBlog}
+              path={routes.blogs.download}
+            />
+            ;
             <PrivateRoute
               component={Signup}
               condition={!isLoggedIn}

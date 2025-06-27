@@ -17,6 +17,19 @@ const update = ({ quiet = false, slug, payload }) =>
 const destroy = ({ slug, quiet }) =>
   axios.delete(`/posts/${slug}${quiet ? "?quiet" : ""}`);
 
-const postsApi = { fetch, show, create, update, destroy };
+const generatePdf = slug => axios.post(`/posts/${slug}/blogpost`, {});
+
+const download = slug =>
+  axios.get(`/posts/${slug}/blogpost/download`, { responseType: "blob" });
+
+const postsApi = {
+  fetch,
+  show,
+  create,
+  update,
+  destroy,
+  generatePdf,
+  download,
+};
 
 export default postsApi;

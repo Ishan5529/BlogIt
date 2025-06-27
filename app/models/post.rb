@@ -3,6 +3,10 @@
 class Post < ApplicationRecord
   require Rails.root.join("config/initializers/constants.rb")
 
+  scope :accessible_to, ->(user_id, org_id) {
+    joins(:user).where("posts.user_id = ? OR users.organization_id = ?", user_id, org_id)
+  }
+
   MAX_TITLE_LENGTH = 125
   MAX_DESCRIPTION_LENGTH = 10000
 
@@ -11,6 +15,7 @@ class Post < ApplicationRecord
   has_and_belongs_to_many :categories
   belongs_to :user
   has_many :votes, dependent: :destroy
+  has_one_attached :blogpost
 
   validates :categories, presence: true
   validates :title, presence: true, length: { maximum: MAX_TITLE_LENGTH }

@@ -25,6 +25,8 @@ module BlogIt
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    # Load dotenv file
+    Dotenv::Railtie.load
     config.active_job.queue_adapter = :sidekiq
     config.generators do |g|
       g.test_framework :test_unit, fixture: false

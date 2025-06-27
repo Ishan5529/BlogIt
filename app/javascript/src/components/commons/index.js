@@ -5,6 +5,7 @@ import PageLoader from "./PageLoader";
 import PageTitle from "./PageTitle";
 import PrivateRoute from "./PrivateRoute";
 import Profile from "./Profile";
+import ProgressBar from "./ProgressBar";
 import SideBar from "./SideBar";
 import Toastr from "./Toastr";
 import Tooltip from "./Tooltip";
@@ -17,6 +18,7 @@ export {
   PageTitle,
   PrivateRoute,
   Profile,
+  ProgressBar,
   SideBar,
   Toastr,
   Tooltip,

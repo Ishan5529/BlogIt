@@ -56,6 +56,8 @@ const Show = ({
           categories={post.categories.map(category => category.name)}
         />
         <PageTitle
+          enable_download_icon
+          download_url={`/blogs/${slug}/download`}
           enable_back_btn={enable_back_btn}
           enable_edit_icon={post.user?.id === USER_ID && !disable_edit}
           handleBack={() => history.goBack()}

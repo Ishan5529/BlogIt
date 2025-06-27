@@ -29,6 +29,7 @@
 
 en:
   hello: "Hello world"
+  not_found: "Couldn't find %{entity}"
   authorization:
     denied: "Access denied. You are not authorized to perform this action."
   session:
@@ -42,3 +43,8 @@ en:
     slug:
       immutable: "is immutable!"
     not_found: "Couldn't find Post"
+  blogpost:
+    render: "Rendering the blogpost"
+    generate: "Generating the PDF blogpost"
+    upload: "Uploading to server"
+    attach: "Attaching the blogpost to the post"
