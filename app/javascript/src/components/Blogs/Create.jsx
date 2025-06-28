@@ -47,7 +47,7 @@ const Create = ({ history }) => {
         status: "published",
       });
       setLoading(false);
-      history.push("/blogs");
+      history.push("/");
     } catch (error) {
       setLoading(false);
       logger.error(error);

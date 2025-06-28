@@ -1,17 +1,81 @@
-<div class="mb-4 font-bold">Your post:</div>
-<div class="p-4 mb-8 bg-white neeto-ui-shadow-s rounded">
-  <div class="flexrow w-full mb-4">
-    <span>
-      <% if @post.status === "published" %>
-      <input type="checkbox" checked>
-      <% else %>
-      <input type="checkbox">
+<style>
+  .blogpost-container {
+    margin-top: 2.5rem;
+    padding-bottom: 5rem;
+    padding-right: 2.5rem;
+    height: 100%;
+  }
+  .categories {
+    margin-bottom: 1rem;
+  }
+  .category-badge {
+    margin-right: 0.5rem;
+    border-radius: 4px;
+    background: #bbf7d0;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  .blogpost-header {
+    align-items: center;
+    justify-content: space-between;
+  }
+  .blogpost-title {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  .draft-badge {
+    color: #ef4444;
+    font-weight: bold;
+    border: 1px solid #ef4444;
+    padding: 0.25rem 1.25rem;
+    border-radius: 16px;
+  }
+  .blogpost-description {
+    color: #374151;
+  }
+</style>
+
+<div class="blogpost-container">
+  <div>
+    <div class="categories">
+      <% @post.categories.each do |category| %>
+        <span class="category-badge"><%= category.name %></span>
       <% end %>
-    </span>
-    <div class="ml-4">
-      <div class="mb-1">
-        <div class="text-gray-500"><%= @post.title %></div>
-      </div>
     </div>
+    <div class="blogpost-header">
+      <table style="width: 100%; margin-bottom: 1rem; border-collapse: collapse;">
+        <tr>
+          <td class="blogpost-title"><%= @post.title %></td>
+          <% if @post.status.to_s.downcase.strip == "draft" %>
+            <td style="text-align: right; vertical-align: middle;">
+              <span class="draft-badge">Draft</span>
+            </td>
+          <% end %>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <table style="margin-top: 1rem; border-collapse: collapse;">
+  <tr>
+    <td style="padding-right: 1rem;">
+      <div style="
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-image: url('<%= default_profile_image_url %>');
+        background-size: cover;
+        background-position: center;
+      "></div>
+    </td>
+    <td style="vertical-align: middle;">
+      <p style="margin: 0; font-weight: bold; color: black;"><%= @post.user&.name %></p>
+      <p style="margin: 0; color: black;"><%= @post.updated_at.strftime('%b %d, %Y') %></p>
+    </td>
+  </tr>
+</table>
+
+  <div class="blogpost-description">
+    <%= simple_format(@post.description) %>
   </div>
 </div>

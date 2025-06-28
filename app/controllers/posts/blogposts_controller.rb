@@ -4,7 +4,6 @@ class Posts::BlogpostsController < ApplicationController
   before_action :set_post, only: [:download]
   def create
     post = Post.find_by!(slug: params[:post_slug] || params[:slug])
-    puts post
     BlogpostsJob.perform_async(post.slug)
   end
 

@@ -78,7 +78,7 @@ const Show = ({
         </div>
       </div>
       <div className="pr-32">
-        <p className="text-gray-700">{post.description}</p>
+        <p className="whitespace-pre-line text-gray-700">{post.description}</p>
       </div>
     </div>
   );
